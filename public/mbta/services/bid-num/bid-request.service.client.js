@@ -5,7 +5,8 @@
 
     function bidRequestService($http) {
         var api = {
-            requestBid: requestBid
+            requestBid: requestBid,
+            getNextNumber: getNextNumber
         };
         return api;
 
@@ -15,6 +16,13 @@
                 .then(function (response) {
                     return response.data;
                 });
+        }
+        function getNextNumber(){
+            var url = "/api/bid-num/next";
+            return $http.get(url)
+                .then(function(response){
+                    return response.data;
+                })
         }
     }
 })();

@@ -15,7 +15,7 @@
     <br/>
     <label>Funding Source Code:</label>
     <select ng-model="model.fundCode" required>
-        <option>MBTAN (IFB - RFI - RFP)</option>
+        <option>MBTAN</option>
         <option>MBTAC</option>
         <option>MBTAF</option>
     </select>
@@ -27,6 +27,15 @@
         <option>Federal</option>
     </select>
     <br/>
+        <label>Bid Type</label>
+        <select ng-model="model.bidType" required>
+            <option>IFB (Invitation for Bid)</option>
+            <option>RFP (Request for Proposals)</option>
+            <option>LOI (Letter of Interest)</option>
+            <option>RFI (Request for Information)</option>
+            <option>RFR (Request for Response)</option>
+        </select>
+        <br/>
     <label>Bid Opening Time Frame:</label>
     <select ng-model="model.timeFrame" required>
         <option>1 Week</option>
