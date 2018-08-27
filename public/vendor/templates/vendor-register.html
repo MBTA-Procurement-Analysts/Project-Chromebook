@@ -1,0 +1,70 @@
+<h3>Add Vendor</h3>
+<label>Vendor Name</label>
+<input type="text" placeholder="Vendor Name" ng-model="model.vendor.name" style="width: 50%;">
+<br/>
+<label>Address Line 1</label>
+<input type="text" placeholder="10 Park Plaza" ng-model="model.vendor.address1" style="width: 50%;">
+<br/>
+<label>Address Line 2</label>
+<input type="text" placeholder="Room #2810" ng-model="model.vendor.address2" style="width: 50%;">
+<br/>
+<label>City</label>
+<input type="text" placeholder="Boston" ng-model="model.vendor.city" style="width: 50%;">
+<br/>
+<label>State</label>
+<input type="text" placeholder="MA" ng-model="model.vendor.state" style="width: 10%;">
+<br/>
+<label>Zip Code</label>
+<input type="text" placeholder="02116" ng-model="model.vendor.zipCode" style="width: 10%;">
+<br/>
+<label>Website</label>
+<input type="text" placeholder="mbta.com" ng-model="model.vendor.website" style="width: 50%;">
+<br/><br/>
+<label>Contact Name</label>
+<input type="text" placeholder="John Doe" ng-model="model.vendor.contactName" style="width: 50%;">
+<br/>
+<label>Contact Email</label>
+<input type="text" placeholder="jdoe@materials.com" ng-model="model.vendor.email" style="width: 50%;">
+<br/>
+<label>Contact Phone</label>
+<input type="text" placeholder="123-456-7890" ng-model="model.vendor.phone" style="width: 50%;">
+<br/>
+<label>Contact Fax</label>
+<input type="text" placeholder="123-456-7890" ng-model="model.vendor.fax" style="width: 50%;">
+<br/>
+<br/><br/>
+<label>Select Type(s)</label>
+<select class="bottom-selectors" id="vendorTypeBox" multiple ng-model="model.vendor.type">
+    <option>General Contractor</option>
+    <option>Prime Contractor</option>
+    <option>Sub Contractor</option>
+    <option>Small Business</option>
+    <option>Other</option>
+</select>
+<br/>
+<label>Select Entities</label>
+<select class="bottom-selectors" id="vendorEntityBox" multiple ng-model="model.vendor.entities">
+    <option>None</option>
+    <option>Disadvantaged Business Enterprise</option>
+    <option>Women-Owned Business Enterprise</option>
+    <option>Small Business Enterprise</option>
+</select>
+<br/>
+<label>Gross Sales</label>
+<select class="bottom-selectors" id ="vendorsalesBox" ng-model="model.vendor.grossSales">
+    <option>$0 - $500,000</option>
+    <option>$500,000 - $1,000,000</option>
+    <option>$1,000,000 - $5,000,000</option>
+    <option>$5,000,000 +</option>
+</select>
+<br/>
+<label>Years in Business</label>
+<select class="bottom-selectors" id ="vendorYearsBox" ng-model="model.vendor.yearsInBusiness">
+    <option>0 - 5</option>
+    <option>5 - 10</option>
+    <option>10 - 20</option>
+    <option>20 +</option>
+</select>
+<br/>
+<br/>
+<button class="btn btn-block btn-success" ng-click="model.submitVendor()">Submit Information</button>

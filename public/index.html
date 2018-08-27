@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--Declare angular app-->
+<html ng-app="VPP">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MBTA Business Center</title>
+    <!--The order here is very important!-->
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+
+    <script src="app.js"></script>
+    <script src="config.js"></script>
+    <script src="./mbta/controllers/mbta-registration.controller.client.js"></script>
+    <script src="./mbta/controllers/mbta-create-bid.controller.client.js"></script>
+    <script src="./mbta/controllers/mbta-bid-listing.controller.client.js"></script>
+    <script src="./mbta/controllers/mbta-bid-view.controller.client.js"></script>
+    <script src="./mbta/controllers/mbta-bid-file-upload.controller.client.js"></script>
+    <script src="./mbta/controllers/mbta-edit-bid.controller.client.js"></script>
+    <script src="./mbta/controllers/mbta-login-controller.js"></script>
+
+    <script src="./vendor/controllers/vendor-reg-controller.client.js"></script>
+    <script src="./vendor/controllers/vendor-list-controller.client.js"></script>
+    <script src="./vendor/controllers/vendor-view-controller.js"></script>
+
+
+    <script src="./admin/controllers/admin-reg-controller.js"></script>
+    <script src="./admin/controllers/admin-user-view-controller.js"></script>
+    <script src="./snippets/controllers/header-controller.client.js"></script>
+    <script src="./snippets/service/header-service-client.js"></script>
+
+    <script src="./vendor/services/vendor-service.client.js"></script>
+    <script src="./mbta/services/user.service.client.js"></script>
+    <script src="./mbta/services/bid.service.client.js"></script>
+    <script src="./admin/services/admin.service.client.js"></script>
+    <!-- For Bid Number Submission -->
+    <script src="./mbta/controllers/bid-num/mbta-bid-num-submission.controller.client.js"></script>
+    <script src="./mbta/services/bid-num/bid-request.service.client.js"></script>
+
+</head>
+<body>
+
+<!--Templates are loaded here-->
+<div class="container jumbotron">
+
+    <div ng-controller = "headerController as model">
+        <ng-include src="'snippets/header.html'"></ng-include>
+    </div>
+
+    <div ng-view autoscroll>
+
+    </div>
+</div>
+
+</body>
+<footer>
+
+</footer>
+</html>

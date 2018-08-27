@@ -1,0 +1,12 @@
+<h1>{{model.bid.bidNumber}}
+    <a ng-if="model.user._id" href="#!/edit-bid/{{model.bid._id}}">
+        <div class="btn btn-success btn-lg float-right"><span class="float-right">Edit</span></div>
+    </a>
+</h1>
+<a ng-if="model.user._id" href="#!/upload-bid/{{model.bid._id}}">
+    <div class="btn btn-primary btn-lg float-right"><span class="float-right">Upload Docs</span></div>
+</a>
+<h5>{{model.bid.bidType}}</h5>
+<p>{{model.bid.bidDesc}}</p>
+<br/>
+<p><b>Submission Deadline:</b> {{model.formatDate(model.bid.bidDeadline)}}</p>

@@ -1,0 +1,27 @@
+<h3>MBTA Registration</h3>
+<p><b>Note:</b> This form is only to request access to this site, and does not guarantee an account will be created.
+    You will receive an email with your login credentials, or a denial.</p>
+<div ng-show="model.error"
+     class="alert alert-danger">
+    {{model.error}}</div>
+<div class="container login">
+    <label>First Name:&nbsp</label><input type="text" ng-model="fname">
+    <br/>
+    <label>Last Name:&nbsp</label><input type="text" ng-model="lname">
+    <br/>
+    <label>MBTA Email address:&nbsp</label><input type="text" ng-model="email">
+    <br/>
+    <label>Phone Number:&nbsp</label><input type="text" ng-model="phone">
+    <br/>
+    <label>Password:&nbsp</label></label><input type="password" ng-model="password">
+    <br/>
+    <label>Verify Password:&nbsp</label></label><input type="password" ng-model="password2">
+    <br/>
+    <label>Reason for request:&nbsp</label><br/><textarea rows="3" columns="200" ng-model="reasoning"></textarea>
+    <br/>
+    <a ng-click="model.register(fname, lname, email, phone, reasoning, password, password2)"
+       class="btn btn-warning btn-block">
+        Request Access</a>
+    </form>
+</div>
+<br/>

@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="list-group">
+        <div class="list-header list-group-item " style="background-color: #0E7DC2;">
+            <div class="row">
+                <div class="col">Bid Number</div>
+                <div class="col-6">Bid Description</div>
+                <div class="col-3">Submission Deadline</div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+        <div ng-repeat="bid in model.bids | orderBy:'model.orderBy'">
+            <div class="list-group-item">
+                <div class="row bid-row">
+                    <div class="col">{{bid.bidNumber}}</div>
+                    <div class="col-6" style="overflow: hidden; word-wrap: break-word;">{{bid.bidDesc}}</div>
+                    <div class="col-2">{{model.formatDate(bid.bidDeadline)}}</div>
+                    <div class="col-2"><a href="#!/view-bid/{{bid._id}}" class="btn btn-success btn-block">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

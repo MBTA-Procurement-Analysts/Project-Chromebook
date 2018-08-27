@@ -1,0 +1,33 @@
+<div class="container">
+    <h1>Manual Register</h1>
+    <div ng-show="model.error"
+         class="alert alert-danger">
+        {{model.error}}</div>
+
+    <div ng-show="model.message"
+         class="alert alert-danger">
+        {{model.message}}</div>
+    <select ng-model="model.role">
+        <option>Admin</option>
+        <option>Buyer</option>
+        <option>DBE Owner</option>
+        <option>Vendor</option>
+    </select>
+    <input type="text"
+           class="form-control"
+           placeholder="username"
+           ng-model="username"/>
+    <input type="password"
+           class="form-control"
+           placeholder="password"
+           ng-model="password"/>
+    <input type="password"
+           ng-model="password2"
+           class="form-control"
+           placeholder="verify password"/>
+    <a ng-click="model.register(username,password,password2)"
+       class="btn btn-primary btn-block">
+        Register</a>
+    <a class="btn btn-danger  btn-block"
+       href="#!/">Cancel</a>
+</div>

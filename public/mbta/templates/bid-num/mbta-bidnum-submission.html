@@ -1,0 +1,53 @@
+<div class="alert alert-warning" ng-if="model.errorText">
+    {{model.errorText}}
+</div>
+<h3>Bid Number Request Form</h3>
+<div class="add-IFB">
+    <form name="bidNumRequest">
+    <label>Buyer ID:</label>
+    <input type="text" placeholder="Buyer Name" ng-model="model.user.username" required>
+    <br/>
+    <label>Project Name:</label>
+    <input type="text" placeholder="Project Name" ng-model="model.projName" required>
+    <br/>
+    <label>Requisition Number:</label>
+    <input type="text" placeholder="Req ID" ng-model="model.reqID" required>
+    <br/>
+    <label>Funding Source Code:</label>
+    <select ng-model="model.fundCode" required>
+        <option>MBTAN (IFB - RFI - RFP)</option>
+        <option>MBTAC</option>
+        <option>MBTAF</option>
+    </select>
+    <br/>
+    <label>Funding Source:</label>
+    <select ng-model="model.fundSrc" required>
+        <option>Operations</option>
+        <option>Capital</option>
+        <option>Federal</option>
+    </select>
+    <br/>
+    <label>Bid Opening Time Frame:</label>
+    <select ng-model="model.timeFrame" required>
+        <option>1 Week</option>
+        <option>2 Weeks</option>
+        <option>3 Weeks</option>
+        <option>4 Week</option>
+        <option>5 Weeks</option>
+        <option>Other</option>
+    </select>
+    <br/>
+    <div ng-if="model.timeFrame === 'Other'">
+        <label>Enter Other Timeframe:</label>
+        <input type="text" placeholder="Other" ng-model="model.realTimeFrame">
+        <br/>
+    </div>
+    <br/>
+    <label style="float: left;">Comments: </label>
+    <textarea rows="2" cols="40" ng-model="model.comments"></textarea>
+    <br/>
+
+
+    <button class="btn btn-block btn-success" ng-click="model.submitRequest()">Submit Bid and Upload Files</button>
+    </form>
+</div>

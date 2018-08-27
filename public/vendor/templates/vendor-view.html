@@ -1,0 +1,24 @@
+<h1>{{model.vendor.name}}
+    <a ng-if="model.vendor._id" href="#!/edit-vendor/{{model.vendor._id}}">
+        <div class="btn btn-success btn-lg float-right"><span class="float-right">Edit</span></div>
+    </a>
+</h1>
+<h5>{{model.arrayToString(model.vendor.type)}}</h5>
+<h5>{{model.arrayToString(model.vendor.entities)}}</h5>
+<h5>{{model.vendor.grossSales}} in gross sales, {{model.vendor.yearsInBusiness}} years in business</h5>
+<h5><a href="http://{{model.vendor.website}}">{{model.vendor.website}}</a></h5>
+
+<hr>
+
+<blockquote class="blockquote">
+    <p>{{model.vendor.description}}</p>
+</blockquote>
+
+<hr>
+<h3>Contact Information:</h3>
+<h5>{{model.vendor.contactName}}</h5>
+<p>{{model.vendor.address1}} {{model.vendor.address2}}
+    <br>{{model.vendor.city}}, {{model.vendor.state}}, {{model.vendor.zipCode}}</p>
+<br>
+<a href ="mailto: {{model.vendor.email}}">{{model.vendor.email}}</a>
+<p>Phone: {{model.vendor.phone}}<br>Fax: {{model.vendor.fax}}</p>

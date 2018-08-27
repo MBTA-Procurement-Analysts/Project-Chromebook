@@ -1,0 +1,54 @@
+<h1>Map</h1>
+
+<div id="drawArea"></div>
+<script>
+    // Create a svg canvas
+    var svg = d3.select("#drawArea")
+        .append("svg")
+        .attr("width", 2500)
+        .attr("height", 800)
+        .style("background-color", "white");
+
+
+    d3.json("data.json", function (error, data) {
+        console.log(data);
+        for (d in data.lines) {
+            svg.append("text")
+                .text(data.lines[d].name)
+                .attr("text-anchor", "start")
+                .attr("x", data.lines[d].x0)
+                .attr("y", data.lines[d].y0 -40);
+
+            svg.append("line")
+                .style("stroke", data.name)
+                .attr("stroke-width", 7)
+                .attr("x1", data.lines[d].x0)
+                .attr("y1", data.lines[d].y0)
+                .attr("x2", data.lines[d].x1)
+                .attr("y2", data.lines[d].y1);
+
+            svg.append("circle")
+                .attr("r", 6)
+                .attr("cx", data.lines[d].x0)
+                .attr("cy", data.lines[d].y0);
+        }
+        svg.append("rect")
+            .attr("width", "30px")
+            .attr("height", "15px")
+            .attr("x", data.lines[0].x0 - 7.5)
+            .attr("y", data.lines[0].y0 -7.5);
+
+        d3.selectAll("rect")
+            .transition()
+            .delay(100)
+            .duration(10000)
+            .attr("x", data.lines[5].x0 - 15);
+
+        d3.selectAll("text")
+            .attr("transform", function (d) {
+                return "rotate(4)"
+            })
+    });
+
+
+</script>

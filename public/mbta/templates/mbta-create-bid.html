@@ -1,0 +1,64 @@
+<div class="alert alert-warning" ng-if="model.errorText">
+    {{model.errorText}}
+</div>
+<h3>Add Bid</h3>
+<label>Select bid type: </label>
+<select ng-model="model.bidType">
+    <option>Invitation For Bid</option>
+    <option>Letter of Interest</option>
+    <option>Request for Information</option>
+    <option>Request for Proposal</option>
+    <option>Request for Qualifications</option>
+</select>
+
+<div class="add-IFB">
+    <label>Bid Number:</label>
+    <input type="text" placeholder="Bid Number" ng-model="model.bidNumber">
+    <br/>
+    <label style="float: left;">Bid Information: </label>
+    <textarea rows="2" cols="40" ng-model="model.bidDesc"></textarea>
+    <br/>
+    <label>Submission Deadline: </label>
+    <input type="datetime-local" style="width:28%;" ng-model="model.bidDeadline">
+    <br/>
+    <label>Will there be a Pre-Bid meeting?</label>
+    <input type="checkbox" ng-model="model.preBid" />
+    <div ng-if="model.preBid">
+        <label>Pre-Bid Meeting Date: </label>
+        <input type="datetime-local" style="width:28%;" ng-model="model.preBidDate">
+        <br/>
+        <label>Pre-Bid Meeting Location: </label>
+        <input type="text" style="width:50%;" ng-model="model.preBidLocation">
+    </div>
+    <br/>
+    <label>DBE Owner</label>
+    <select ng-model="model.dbeOwner">
+        <option>DBE OWNER 1</option>
+        <option>DBE OWNER 2</option>
+        <option>DBE OWNER 3</option>
+        <option>DBE OWNER 4</option>
+        <option>DBE OWNER 5</option>
+    </select>
+    <label>DBE Percentage</label>
+    <span><input type="number" max="100" accuracy="2" min="0" style="text-align:right; width:8%;"
+                 ng-model="model.dbePercent">%</span>
+    <br/>
+    <div ng-if="model.bidType == 'Invitation For Bid' || model.bidType == 'Request for Proposal'">
+        <label>Material Bid Type:</label>
+        <select ng-model="model.materialType">
+            <option>Bid</option>
+            <option>Surplus</option>
+        </select>
+    </div>
+    <br/><br/>
+    <!-- display categories from db in here! -->
+    <!-- <h3>Upload Documents</h3>
+     <div id="addUpload">
+         <button ng-click="model.addUploader()">Add New File</button>
+     </div>
+ -->
+    <!--<h3>Notify Providers</h3> -->
+    <!-- add in email form here -->
+    <br/>
+    <button class="btn btn-block btn-success" ng-click="model.submitBid()">Submit Bid and Upload Files</button>
+</div>
