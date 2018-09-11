@@ -1,6 +1,6 @@
 var app = require('../../../express');
 var bidModel = require('../model/bid.model.server');
-
+var counterModel = require('../model/counter.model.server');
 app.post('/api/add-bid', createBid);
 app.get('/api/bids', getBids);
 app.get('/api/bid/:bidId', getSpecificBid);
@@ -9,15 +9,30 @@ app.delete('/api/remove-bid/:bidId', removeBid);
 
 function createBid(req, res) {
     var bid = req.body;
-    console.log(bid);
-    bidModel
-        .createBid(bid)
-        .then(function (bid) {
-            res.send(bid);
-        }, function (err) {
-            res.send(err);
+    var b_id = bid.Bid_Type;
+    var fund = bid.Fund_Code.slice(-1);
+    var bidNum = "";
+    var d = new Date;
+    counterModel.getCount()
+        .then(function (response) {
+            bidNum = response.Count;
+            counterModel.incrCount();
+            b_id = b_id + " " + bidNum;
+            if (fund != "N") {
+                b_id = b_id + fund;
+            }
+            bid.Bid_ID = b_id +"-" + (d.getYear() - 100);
+
+            bidModel
+                .createBid(bid)
+                .then(function (bid) {
+                    res.send(bid);
+                }, function (err) {
+                    res.send(err);
+                });
         });
 }
+
 
 function updateBid(req, res) {
     var bid = req.body;

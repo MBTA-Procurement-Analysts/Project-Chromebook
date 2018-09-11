@@ -22,6 +22,14 @@
                     return response.data;
                 });
         }
+        function saveFields(bidInformation) {
+            console.log(bidInformation);
+            var url = "/api/save-fields";
+            return $http.put(url, bidInformation)
+                .then(function (response) {
+                    return response.data;
+                });
+        }
 
         function removeBid(bidId) {
             var url = "/api/remove-bid/" + bidId;

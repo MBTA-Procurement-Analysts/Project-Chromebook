@@ -1,0 +1,101 @@
+<div class="alert alert-warning" ng-if="model.errorText">
+    {{model.errorText}}
+</div><h3>IFB Template Generator</h3>
+<div class="add-IFB">
+    <form name="ifbNumberGen">
+        <label>Buyer ID:</label>
+        <input class="longInput" type="text" placeholder="Buyer Name" ng-model="model.bid.Buyer" required>
+        <br/>
+        <label>Funding Source:</label>
+        <input class="longInput" type="text" placeholder="Funding Source" ng-model="model.bid.Fund_Code" required>
+        <br/>
+        <label>Bid ID:</label>
+        <input class="longInput" type="text" placeholder="Bid ID" ng-model="model.bid.Bid_ID" required>
+        <br/>
+        <label>Req ID:</label>
+        <input class="longInput" type="text" placeholder="Req ID" ng-model="model.bid.Req_ID" required>
+        <br/>
+        <label>Project Name:</label>
+        <input class="longInput" type="text" placeholder="Project Name" ng-model="model.bid.Proj_Name" required>
+        <br/>
+        <label  style="float: left;">Project Description:</label>
+        <textarea rows="2" cols="40" ng-model="model.bid.Proj_Descr"></textarea>
+        <br/>
+        <label>Project Name:</label>
+        <input class="longInput" type="text" placeholder="Project Name" ng-model="model.bid.Proj_Name" required>
+        <br/>
+        <label>Buyer Name:</label>
+        <input class="longInput" type="text" placeholder="Buyer Name" ng-model="model.bid.Buyer.fullname" required>
+        <br/>
+        <label>Buyer Email:</label>
+        <input class="longInput" type="text" placeholder="Buyer Email" ng-model="model.bid.BuyerEmail" required>
+        <br/>
+        <label>Will there be a Pre-Bid Conference?</label>
+        <input type="checkbox" ng-model="model.bid.preBidConference"/>
+        <br/>
+        <div ng-show="model.bid.preBidConference">
+            <label>Pre-Bid Conference Time:</label>
+            <input type="datetime-local" style="width:50%;" ng-model="model.bid.PreBidDttm">
+            <br/>
+        </div>
+        <label>Bid Opening Date:</label>
+        <input type="datetime-local" style="width:50%;" ng-model="model.bid.Timeframe">
+        <br/>
+        <label>Will alternative bids be accepted for this solicitation?</label>
+        <input type="checkbox" ng-model="model.bid.alternativebid"/>
+        <br/>
+        <label>The Authority requires a minimum acceptance of at least</label>
+        <input  type="text" placeholder="120" ng-model="model.bid.minimumAcceptanceDays" required>days
+        <br/>
+        <label>Delivery Address:</label>
+        <input class="longInput" type="text" placeholder="Delivery Address" ng-model="model.bid.deliveryAddress" required>
+        <br/>
+        <label>Delivery Timeframe:</label>
+        <input class="longInput" type="text" placeholder="Delivery Time" ng-model="model.bid.deliveryTime" required>
+        <br/>
+        <label>Will there be a performance bond required for this solicitation?</label>
+        <input type="checkbox" ng-model="model.bid.performanceBond"/>
+        <br/>
+        <div ng-show="model.bid.performanceBond">
+            <label>Performance Bond Guarantee Percentage:</label>
+            <input type="number" placeholder="75" ng-model="model.bid.performanceGuaranteePercent" required>%
+            <br/>
+            <label>Performance Bond Amount:</label>
+            <input type="text" placeholder="Performance Bond $ Amount" ng-model="model.bid.performanceGuaranteeAmount" required>
+            <br/>
+        </div>
+        <br/>
+        <label>Will there be liquidated damages required for this solicitation?</label>
+        <input type="checkbox" ng-model="model.bid.liquidatedDamages"/>
+        <br/>
+        <div ng-show="model.bid.liquidatedDamages">
+            <label>Notwithstanding the indemnification provisions of this Contract, if Contractor fails to </label>
+            <textarea rows="2" cols="40" ng-model="model.bid.liquidatedDamagesConditions"></textarea>
+            <br/>, <label>Contractor shall pay $</label>
+            <input type="number" placeholder="75" ng-model="model.bid.performanceGuaranteePercent" required>%
+            per {LIQUIDATED_DAMAGES_UNIT_OF_DELAY} of delay as liquidated damages and not as a penalty, up to a maximum of {LIQUIDATED_DAMAGES_MAX}% of the Contract value.</label>
+            <label>Performance Bond Guarantee Percentage:</label>
+            <input type="number" placeholder="75" ng-model="model.bid.performanceGuaranteePercent" required>%
+            <br/>
+            <label>Performance Bond Amount:</label>
+            <input type="text" placeholder="Performance Bond $ Amount" ng-model="model.bid.performanceGuaranteeAmount" required>
+            <br/>
+        </div>
+        <br/>
+        "LIQUIDATED_DAMAGES": model.liquidatedDamages, // boolean
+        "LIQUIDATED_DAMAGES_CONDITIONS": model.liquidatedDamagesConditions,
+        "LIQUIDATED_DAMAGES_AMT_PER_UNIT": model.liquidatedDamagesAmtPer,
+        "LIQUIDATED_DAMAGES_UNIT_OF_DELAY": model.liquidatedDamagesUOD,
+        "LIQUIDATED_DAMAGES_MAX": model.maxLiquidatedDamages,
+        "SECURITY_REQUIREMENTS":model.securityReqs, // boolean
+        "RIGHT_OF_WAY": model.row
+
+        <label style="float: left;">Comments: </label>
+        <textarea rows="2" cols="40" ng-model="model.bid.comments"></textarea>
+        <br/>
+
+        <button class="btn btn-block btn-success" ng-click="model.saveFields()">Save Fields</button>
+
+        <button class="btn btn-block btn-success" ng-click="model.submitBid()">Submit Bid</button>
+    </form>
+</div>

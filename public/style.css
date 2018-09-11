@@ -99,3 +99,7 @@ input[type=checkbox] {
     text-align: center;
     display: block;
 }
+
+.longInput{
+    width: 50%;
+}

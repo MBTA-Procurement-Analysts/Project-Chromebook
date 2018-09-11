@@ -1,15 +1,15 @@
 var mongoose = require('mongoose');
 
 var bidSchema = mongoose.Schema({
-        bidType: String,
-        bidNumber: {type: String, unique: true, require: true},
-        bidDesc: String,
-        bidDeadline: Date,
-        preBidDate: Date,
-        preBidLocation: String,
-        dbeOwner: String,
-        dbePercent: Number,
-        entered: { type: Date, default: Date.now }
+        "Buyer": String,
+        "Proj_Name": String,
+        "Req_ID": String,
+        "Fund_Code": String,
+        "Bid_Type": String,
+        "Timeframe": Date,
+        "Comments": String,
+        "Requested_Dttm": Date,
+        "Bid_ID": String
     },
     {
         collection: "bid"

@@ -26,6 +26,14 @@
                     currentUser: checkLoggedIn
                 }
             })
+            .when('/document-bid/:bidNumber',{
+                templateUrl: './mbta/templates/mbta-bid-document-form.html',
+                controller: 'MBTAbidDocFormController',
+                controllerAs: 'model',
+                resolve: {
+                    currentUser: checkLoggedIn
+                }
+            })
             .when('/success', {
                 templateUrl: './mbta/templates/bid-num/mbta-bidnum-success.html',
                 resolve: {

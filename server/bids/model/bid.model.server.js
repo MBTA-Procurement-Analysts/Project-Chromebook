@@ -10,7 +10,9 @@ bidModel.removeBid = removeBid;
 module.exports = bidModel;
 
 function createBid(bid) {
-    bid.bidDeadline = Date.parse(bid.bidDeadline);
+    bid.Timeframe = Date.parse(bid.Timeframe);
+    console.log("server" + JSON.stringify(bid));
+
     return bidModel.create(bid);
 }
 
@@ -23,8 +25,8 @@ function getSpecificBid(bidId) {
 }
 
 function updateBid(bid, bidId) {
-    return bidModel.update({_id: bidId}, {$set: bid});
+    return bidModel.update({"_id": bidId}, {$set: bid});
 }
 function removeBid(bidId) {
-    return bidModel.remove({_id: bidId});
+    return bidModel.remove({"_id": bidId});
 }
