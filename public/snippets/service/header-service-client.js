@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .factory('headerService', headerService);
 
     function headerService($q, userService) {

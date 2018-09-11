@@ -1,0 +1,145 @@
+<head>
+  <meta charset="UTF-8">
+  <title>{{model.title}}</title>
+  <link href="./view/stylesheets/style.css" rel="stylesheet"/>
+</head>
+<div class="container">
+  <!--Title, buttons-->
+  <div class="row align-baseline py-1">
+    <h4 class="col-5">Requisition of #{{model.REQJSON['REQ_No']}}</h4>
+    <div class="col-7 justify-content-end">
+      <form ng-submit="model.redir()" class="d-flex" ng-hide="model.ifIE">
+        <input type="text" id="reqid_input" ng-model="model.inputReqid" name="reqid" class="form-control mx-1" placeholder="Req ID" pattern="[_A-Za-z0-9\-]*">
+        <button type="button" class="btn btn-primary mx-1" ng-click="model.redir()"><i class="fas fa-search mx-1"></i>Search</button>
+        <button type="button" class="btn btn-info mx-1" onclick="window.print()"><i class="fas fa-print mx-1"></i>Print</button>
+      </form>
+    </div>
+  </div>
+
+  <!--Show this alert if Req Not Found, controlled by bool model.foundData-->
+  <div class="alert alert-danger" ng-hide="! model.ifIE">
+    <b><i class="fas fa-exclamation-circle mr-3"></i>Your browser is not supported. Please use Google Chrome or Firefox for optimal results.</b>
+  </div>
+  <div class="alert alert-danger" ng-hide="model.foundData">
+    <b><i class="fas fa-exclamation-circle mr-3"></i>Req ID Not Found or Invalid. This tool accepts Req IDs with Letters, Numbers, Dash, and Underscore.</b>
+  </div>
+
+  <!--Hide Entire Component if invalid or initial render-->
+  <div ng-hide="model.hideTables">
+    <!--The Ship to and Req Metadata Table-->
+    <div class="row justify-content-between">
+      <div class="col-4">
+        <table>
+          <tbody>
+            <tr>
+              <td><b>Ship To:</b></td>
+              <td><b>{{model.REQJSON['Ship_To']['Description']}}<b></td>
+            </tr>
+            <tr class="border-top">
+              <td />
+                <td>{{model.REQJSON['Ship_To']['Address_1']}}</td>
+            </tr>
+            <tr>
+              <td />
+                <td>{{model.REQJSON['Ship_To']['Address_2']}}</td>
+            </tr>
+            <tr>
+              <td />
+                <td>{{model.REQJSON['Ship_To']['City']}}, {{model.REQJSON['Ship_To']['State']}} 0{{model.REQJSON['Ship_To']['Zip_Code']}} </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-7">
+        <table class="tbl-padding float-right">
+          <tbody>
+            <tr>
+              <td>Business Unit: </td>
+              <td></td>
+              <td></td>
+              <td><b>{{model.REQJSON['Business_Unit']}}</b></td>
+              <td><b>{{model.REQJSON['Status']}}</b></td>
+            </tr>
+            <tr class="border-top">
+              <td ><b>Req ID</b></td>
+              <td></td>
+              <td></td>
+              <td><b>Date</b></td>
+
+              <td><b>Requester</b></td>
+              <td><b>Currency</b></td>
+
+              <td><b>Fund</b></td>
+              <td><b>Account</b></td>
+              <td><b>Dept</b></td>
+
+            </tr>
+            <tr>
+              <td colSpan="2"><code>{{model.REQJSON['REQ_No']}}</code></td>
+              <td></td>
+              <td>{{model.REQJSON['REQ_Date'] | date: 'MM/dd/yyyy'}}</td>
+              <td>{{model.REQJSON['Requester']}}</td>
+              <td>{{model.REQJSON['Currency']}}</td>
+              <td>{{model.REQJSON['Fund']}}</td>
+              <td><code>{{model.REQJSON['Account']}}</code></td>
+              <td><code>{{model.REQJSON['Department']['Number']}}</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row py-0">
+      <div class="col-12">
+        <table class="table table-sm table-hover">
+          <thead>
+            <tr>
+              <th>Ln/Schd</th>
+              <th>Item</th>
+              <th>Description</th>
+              <th>Mfg ID</th>
+              <th>Quantity</th>
+              <th>UOM</th>
+              <th>Price</th>
+              <th>Ext. Amt</th>
+              <th>Due Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="req in model.REQJSON['lines'] | orderBy:'Line_No'">
+              <td>{{req.Line_No}} - {{req.Schedule_No}}</td>
+              <td>{{req.Item}}</td>
+              <td>{{req.More_Info}}</td>
+              <td>{{req.MFG_ID}}</td>
+              <td class="text-right">{{req.Quantity}}</td>
+              <td>{{req.UOM}}</td>
+              <td class="text-right">{{req.Unit_Price | currency}}</td>
+              <td class="text-right">{{req.Line_Total| currency}}</td>
+              <td>{{req.Due_Date | date: 'MM/dd/yyyy'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row my-0">
+      <div class="col-3 offset-1">
+        Vendor: {{model.REQJSON['VendorID']}}, {{model.REQJSON['VendorName']}}
+      </div>
+      <div class="col-4 offset-4">
+        <b>
+          Total Requisition Amount: <code>{{model.totalSum | currency}}</code>
+        </b>
+      </div>
+    </div>
+    <div class="row my-1">
+      <div class="col-12">
+        Comments: {{model.REQJSON['ReqComments']}}
+      </div>
+    </div>
+    <hr>
+
+
+  </div>
+</div>

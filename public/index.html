@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--Declare angular app-->
-<html ng-app="VPP">
+<html ng-app="Chrubix">
 
 <head>
     <meta charset="utf-8">
@@ -44,16 +44,22 @@
     <script src="./vendor/services/vendor-service.client.js"></script>
     <script src="./mbta/services/user.service.client.js"></script>
     <script src="./mbta/services/bid.service.client.js"></script>
-    <script src="./admin/services/admin.service.client.js"></script>
+    <script src="admin/services/user.admin.service.client.js"></script>
     <!-- For Bid Number Submission -->
     <script src="./mbta/controllers/bid-num/mbta-bid-num-submission.controller.client.js"></script>
     <script src="./mbta/services/bid-num/bid-request.service.client.js"></script>
+
+    <!-- for rubix integration -->
+    <script src="rubix/services/admin.service.client.js"></script>
+    <script src="rubix/services/getter.service.client.js"></script>
+    <script src="rubix/controllers/buyer-items-controller.js"></script>
+    <script src="rubix/controllers/req-info-controller.js"></script>
 
 </head>
 <body>
 
 <!--Templates are loaded here-->
-<div class="container jumbotron">
+<div class="container jumbotron websiteContainer">
 
     <div ng-controller = "headerController as model">
         <ng-include src="'snippets/header.html'"></ng-include>

@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .config(configuration);
 
     function configuration($routeProvider) {
@@ -146,6 +146,26 @@
             })
             .when('/map', {
                 templateUrl: './toy-map.html'
+            })
+            .when('/buyeritems/:reqid', {
+                templayeUrl: './rubix/templates/buyer-items-info.html',
+                controller: 'buyerItemsController',
+                controllerAs: 'model'
+            })
+            .when('/buyeritems', {
+                templateUrl: './rubix/templates/buyer-items-info.html',
+                controller: 'buyerItemsController',
+                controllerAs: 'model'
+            })
+            .when('/reqinfo', {
+                templateUrl: './rubix/templates/req-info.html',
+                controller: 'reqInfoController',
+                controllerAs: 'model'
+            })
+            .when('/reqinfo/:reqid', {
+                templateUrl: './rubix/templates/req-info.html',
+                controller: 'reqInfoController',
+                controllerAs: 'model'
             })
     }
 

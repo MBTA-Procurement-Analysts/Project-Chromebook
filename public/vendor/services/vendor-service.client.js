@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .factory('vendorService', vendorService);
 
     function vendorService($http) {

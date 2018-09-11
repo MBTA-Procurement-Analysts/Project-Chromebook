@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('MBTAvendorViewController', MBTAvendorViewController);
 
     function MBTAvendorViewController(vendorService, $routeParams, currentUser) {

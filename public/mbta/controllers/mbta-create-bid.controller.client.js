@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('MBTAcreateController', MBTAcreateController);
 
     function MBTAcreateController($location, bidService, currentUser) {

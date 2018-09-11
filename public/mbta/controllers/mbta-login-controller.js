@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('MBTAloginController', loginController);
 
     function loginController($location, userService, currentUser) {

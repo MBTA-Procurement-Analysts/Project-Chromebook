@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .factory('bidService', bidService);
 
     function bidService($http) {

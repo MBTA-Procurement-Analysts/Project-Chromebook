@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('adminRegistrationController', adminController);
 
     function adminController($location, adminService) {

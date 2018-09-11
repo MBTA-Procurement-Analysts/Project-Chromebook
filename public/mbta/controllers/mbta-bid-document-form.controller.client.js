@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('MBTAbidDocFormController', MBTAbidDocFormController);
 
     function MBTAbidDocFormController($location, bidService, currentUser, $routeParams) {

@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('MBTAbidNumSubmissionController', MBTAbidNumSubmissionController);
 
     function MBTAbidNumSubmissionController($location, bidRequestService, currentUser) {

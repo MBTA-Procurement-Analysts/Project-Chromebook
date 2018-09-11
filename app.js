@@ -1,7 +1,7 @@
 console.log("SERVER SIDE!");
 var app = require('express'); // creates an instance of the express lib
 var mongoose = require('mongoose');
-var connectionString = 'mongodb://localhost/VPP';
+var connectionString = 'mongodb://localhost/rubix';
 if (process.env.MLAB_USERNAME_WEBDEV) {
     console.log("on heroku!");
     connectionString = process.env.MLAB_USERNAME_WEBDEV + ":" +
@@ -27,6 +27,11 @@ require("./server/bids/services/file.service.server");
 require("./server/vendors/services/vendor.service.server");
 require("./server/bid-num/services/bid-num.service.server");
 
+require("./server/item-services/item-service-server");
+require("./server/po-services/po-service-server");
+require("./server/req-services/req-service-server");
 //require("./server/mail/mail.server");
+
+module.exports = app;
 
 

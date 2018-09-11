@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('createVendorController', createVendorController);
 
     function createVendorController($location, vendorService, currentUser) {

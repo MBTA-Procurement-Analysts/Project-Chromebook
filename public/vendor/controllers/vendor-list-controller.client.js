@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('vendorListController', vendorListController);
 
     function vendorListController(vendorService) {

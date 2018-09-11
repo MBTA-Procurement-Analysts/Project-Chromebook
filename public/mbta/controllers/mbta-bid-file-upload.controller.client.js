@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('MBTAbidFileController', MBTAbidFileController);
 
     function MBTAbidFileController(bidService, $routeParams) {

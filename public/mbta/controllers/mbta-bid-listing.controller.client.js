@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('MBTAlistController', MBTAlistController);
 
     function MBTAlistController(bidService) {

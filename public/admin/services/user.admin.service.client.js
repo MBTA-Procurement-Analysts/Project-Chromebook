@@ -1,9 +1,9 @@
 (function () {
     angular
-        .module('VPP')
-        .factory('adminService', adminService);
+        .module('Chrubix')
+        .factory('userAdminService', userAdminService);
 
-    function adminService($http) {
+    function userAdminService($http) {
         var api = {
             addBid: addBid,
             getBids: getBids,

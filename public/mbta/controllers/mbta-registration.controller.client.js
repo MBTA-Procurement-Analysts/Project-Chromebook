@@ -1,6 +1,6 @@
 (function () {
     angular
-        .module('VPP')
+        .module('Chrubix')
         .controller('MBTAregisterController', MBTAregisterController);
 
     function MBTAregisterController($location, userService) {
