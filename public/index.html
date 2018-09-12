@@ -14,11 +14,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-animate.js"></script>
     <link rel="stylesheet" href="style.css">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
           integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
     <script src="app.js"></script>
     <script src="config.js"></script>
@@ -34,7 +38,6 @@
     <script src="./vendor/controllers/vendor-reg-controller.client.js"></script>
     <script src="./vendor/controllers/vendor-list-controller.client.js"></script>
     <script src="./vendor/controllers/vendor-view-controller.js"></script>
-
 
     <script src="./admin/controllers/admin-reg-controller.js"></script>
     <script src="./admin/controllers/admin-user-view-controller.js"></script>
@@ -55,12 +58,16 @@
     <script src="rubix/controllers/buyer-items-controller.js"></script>
     <script src="rubix/controllers/req-info-controller.js"></script>
 
+    <script src="mbta/controllers/dashboard/dashboard.controller.client.js"></script>
+    <script src="mbta/services/dashboard/dashboard.service.client.js"></script>
+
 </head>
 <body>
 
 <!--Templates are loaded here-->
+<!--
 <div class="container jumbotron websiteContainer">
-
+-->
     <div ng-controller = "headerController as model">
         <ng-include src="'snippets/header.html'"></ng-include>
     </div>
@@ -68,8 +75,8 @@
     <div ng-view autoscroll>
 
     </div>
-</div>
-
+<!--
+</div>-->
 </body>
 <footer>
 

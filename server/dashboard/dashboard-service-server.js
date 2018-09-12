@@ -1,12 +1,12 @@
 var app = require('../../express');
-var itemModel = require("./dashboard-model");
+var dashModel = require("./dashboard-model");
 
-app.get('/api/item/:number', findItem);
+app.get('/api/dashboard/:userID', findUserDash);
 
-function findItem(req, res) {
+function findUserDash(req, res) {
     console.log("ITEM NUMBER: " + req.params.number);
-    itemModel
-        .findItem(req.params.number)
+    dashModel
+        .findUserDash(req.params.userID)
         .then(function (val) {
             res.json(val);
         })

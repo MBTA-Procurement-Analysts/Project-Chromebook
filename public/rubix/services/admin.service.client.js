@@ -6,9 +6,9 @@
     function adminService($http) {
 
         var api = {
-            updatePO: updatePO,
-            updateREQ: updateREQ,
-            getCollections: getCollections,
+            //updatePO: updatePO,
+            //updateREQ: updateREQ,
+            //getCollections: getCollections,
             findItem: findItem
         };
         return api;

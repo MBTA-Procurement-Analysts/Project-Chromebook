@@ -1,11 +1,10 @@
 var mongoose = require("mongoose");
-var itemSchema = require("./item-schema");
-var itemModel = mongoose.model('ITEMModel',itemSchema);
-itemModel.findItem = findItem;
+var dashSchema = require("./dashboard-schema");
+var dashboardModel = mongoose.model('DASHModel',dashSchema);
+dashboardModel.findUserDash = findUserDash;
 
-module.exports = itemModel;
+module.exports = dashboardModel;
 
-function findItem(itemNumber){
-    console.log("NO: " + itemNumber);
-    return itemModel.find({"Item_No": itemNumber});
+function findUserDash(userID){
+    return dashboardModel.find({"Buyer": userID});
 }

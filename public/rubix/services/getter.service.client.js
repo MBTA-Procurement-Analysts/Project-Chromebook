@@ -44,6 +44,7 @@
                 });
         }
 
+
         function findItem(itemNumber) {
             var url = "/api/item/" + itemNumber;
             console.log(url);

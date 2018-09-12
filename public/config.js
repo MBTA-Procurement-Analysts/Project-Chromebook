@@ -5,11 +5,11 @@
 
     function configuration($routeProvider) {
         $routeProvider
-            /*
+
             .when('/', {
                 templateUrl: 'home.html'
             })
-            */
+
             .when('/', {
                 templateUrl: './mbta/templates/mbta-login.html',
                 controller: 'MBTAloginController',
@@ -166,6 +166,14 @@
                 templateUrl: './rubix/templates/req-info.html',
                 controller: 'reqInfoController',
                 controllerAs: 'model'
+            })
+            .when('/dashboard', {
+                templateUrl: './mbta/templates/dashboard/my-dashboard.html',
+                controller: 'dashboardController',
+                controllerAs: 'model',
+                resolve: {
+                    currentUser: checkLoggedIn
+                }
             })
     }
 

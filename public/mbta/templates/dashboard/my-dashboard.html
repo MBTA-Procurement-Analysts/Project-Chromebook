@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<div class="container">
+    <h1 class="display-4">Top Requisitions</h1>
+    <div class="list-group">
+        <div class="list-header list-group-item " style="background-color: #0E7DC2;">
+            <div class="row">
+                <div class="col-2">Business Unit</div>
+                <div class="col-2">Req ID</div>
+                <div class="col-2">Approval Date</div>
+                <div class="col-2">Req Amount</div>
+                <div class="col-2">Vendor Name</div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+        <div ng-repeat="req in model.dash | orderBy:'model.orderBy' | limitTo: 'model.limit'">
+            <div class="list-group-item">
+                <div class="row bid-row">
+                    <div class="col-2">{{req.Business_Unit}}</div>
+                    <div class="col-2" >{{req.Req_ID}}</div>
+                    <div class="col-2">{{req.dash.req_info[0].Approved_On}}</div>
+                    <div class="col-2">{{req.dash.req_info[0].Amount}}</div>
+                    <div class="col-2" style="overflow: hidden; word-wrap: break-word;">{{req.dash.req_info[0].Vendor.Name}}</div>
+                    <div class="col-2"><a href="#!/reqinfo?reqid={{req.Req_ID}}" class="btn btn-success btn-block">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,7 +3,7 @@
         .module('Chrubix')
         .controller('adminRegistrationController', adminController);
 
-    function adminController($location, adminService) {
+    function adminController($location, userAdminService) {
 
         var model = this;
         model.role ="";
@@ -41,7 +41,7 @@
                     role: model.role
                 };
                 // model.message = user;
-                adminService
+                userAdminService
                     .createUser(user)
                     .then(function(user){
                         $location.url('/');

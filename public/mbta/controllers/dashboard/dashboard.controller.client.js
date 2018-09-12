@@ -1,19 +1,30 @@
 (function () {
     angular
         .module('Chrubix')
-        .controller('MBTAlistController', MBTAlistController);
+        .controller('dashboardController', dashboardController);
 
-    function MBTAlistController(bidService) {
+    function dashboardController(dashService, getterService, currentUser) {
         var model = this;
-        model.getBids = function () {
-            bidService
-                .getBids()
-                .then(function (bids) {
-                    console.log(bids);
-                    model.bids = bids;
+        model.user = currentUser;
+        model.limit = 10;
+        model.getDashboardInformation = function () {
+            dashService
+                .getDashboard(currentUser.username)
+                .then(function (dash) {
+                    console.log(dash);
+                    model.dash = dash;
+                    for(req in dash){
+                        console.log(dash[req]);
+                        getterService
+                            .findREQ(dash[req].Req_ID)
+                            .then(function(reqOut){
+                                model.dash[req].reqInfo = reqOut;
+                                console.log(model.dash[req]);
+                            })
+                    }
                 });
         };
-        model.getBids();
+        model.getDashboardInformation();
 
         model.formatDate = function (mongoDate) {
             var date = new Date(mongoDate);
@@ -22,6 +33,7 @@
             var year = date.getFullYear();
             return month + "/" + day + "/" + year;
         };
+       // function tagForBuckets(aOf)
 
     }
 })();
