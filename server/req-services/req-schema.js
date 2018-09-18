@@ -44,7 +44,12 @@ var reqSchema = new mongoose.Schema(
                     "Line_No" : Number
                 }
             }
-        ]
+        ],
+        "User_Notes":{
+            "User": String,
+            "Date": Number,
+            "Note_Info": String
+        }
     }
 ,{"collection":"REQ_DATA"});
 

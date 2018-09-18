@@ -160,12 +160,18 @@
             .when('/reqinfo', {
                 templateUrl: './rubix/templates/req-info.html',
                 controller: 'reqInfoController',
-                controllerAs: 'model'
+                controllerAs: 'model',
+                resolve: {
+                    currentUser: checkLoggedIn
+                }
             })
             .when('/reqinfo/:reqid', {
                 templateUrl: './rubix/templates/req-info.html',
                 controller: 'reqInfoController',
-                controllerAs: 'model'
+                controllerAs: 'model',
+                resolve: {
+                    currentUser: checkLoggedIn
+                }
             })
             .when('/dashboard', {
                 templateUrl: './mbta/templates/dashboard/my-dashboard.html',

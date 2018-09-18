@@ -1,9 +1,9 @@
 (function () {
   angular
     .module('Chrubix')
-    .controller('reqInfoController', reqInfoController)
+    .controller('reqInfoController', reqInfoController);
 
-  function reqInfoController(getterService, $routeParams) {//currentUser){
+  function reqInfoController(getterService, $routeParams, adminService, currentUser, $location) {//currentUser){
     console.log(navigator.userAgent)
     console.log("v0.3.5 as of 08/13/2018/1 12:22")
     var model = this;
@@ -96,7 +96,6 @@
               model.hideTables = true;
               model.foundData = false;
             }})}}
-
     // Function to construct the item list
     model.constructItemList = function() {
       try {
@@ -115,8 +114,20 @@
       }
       catch (e) {
       }
+    };
+    model.submitNote = function(){
+        var newDate = new Date;
+        var note = {
+            "User": currentUser.username,
+            "Date": Date.now(),
+            "Note_Info": model.note
+        };
+        console.log(note);
+        adminService.addNote(note)
+            .then(
+               // location.reload()
+            )
     }
-
 
 
     if (this.inputParams['reqid']) {

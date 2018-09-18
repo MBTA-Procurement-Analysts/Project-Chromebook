@@ -35,7 +35,7 @@
 
         function findREQ(reqNumber) {
             var url = "/api/req/" + reqNumber;
-            console.log(url);
+            //console.log(url);
             return $http.get(url)
                 .then(function (response) {
                     return response.data;

@@ -9,7 +9,8 @@
             //updatePO: updatePO,
             //updateREQ: updateREQ,
             //getCollections: getCollections,
-            findItem: findItem
+            findItem: findItem,
+            addNote: addNote
         };
         return api;
 
@@ -22,6 +23,16 @@
                 }, function (err) {
                     return err;
                 });
+        }
+        function addNote(note){
+            var url = "/api/add-note/:reqId";
+            console.log(note);
+            return $http.post(url, note)
+                .then(function(response){
+                    return response.data;
+                }, function(err){
+                    return err;
+                })
         }
     }
 })();
