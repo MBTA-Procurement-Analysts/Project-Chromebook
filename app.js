@@ -31,6 +31,7 @@ require("./server/item-services/item-service-server");
 require("./server/po-services/po-service-server");
 require("./server/req-services/req-service-server");
 require("./server/dashboard/dashboard-service-server");
+require("./server/trello/trello.service.server");
 
 //require("./server/mail/mail.server");
 

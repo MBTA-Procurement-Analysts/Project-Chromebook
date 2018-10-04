@@ -138,7 +138,9 @@ function findAllUsers(req, res) {
         .then(function (users) {
             res.send(users);
         }, function (err) {
+            console.log(err);
             res.send(err);
+
         });
 }
 

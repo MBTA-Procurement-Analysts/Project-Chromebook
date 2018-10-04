@@ -115,6 +115,10 @@ input[type=checkbox] {
         display:none !important;
     }
 
-    .container {font-size: 8pt;}
-    table {font-size: 8pt;}
+    .container {font-size: 7pt;}
+    table {font-size: 7pt;}
+}
+
+@page {
+  margin: 1cm;
 }

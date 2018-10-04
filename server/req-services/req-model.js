@@ -3,6 +3,8 @@ var reqSchema = require("./req-schema");
 var reqModel = mongoose.model('REQModel',reqSchema);
 reqModel.findReq = findReq;
 reqModel.addNote = addNote;
+reqModel.getBuyerReqsForDate = getBuyerReqsForDate;
+
 module.exports = reqModel;
 
 function findReq(reqNumber){
@@ -11,15 +13,21 @@ function findReq(reqNumber){
 }
 
 function addNote(reqNumber, note){
+    console.log(reqNumber);
     console.log(note.User);
     console.log(note.Date);
     console.log(note.Note_Info);
-    return reqModel.update({"REQ_No": reqNumber}, {
-        '$addToSet': {
+    return reqModel.updateOne({"REQ_No": reqNumber}, {
+        '$push': {
             "User_Notes": {
                 "User": note.User,
                 "Date": note.Date,
                 "Note_Info": note.Note_Info
             }
         }})
+}
+
+function getBuyerReqsForDate(buyer, date){
+    console.log(buyer + " " + new Date(date).toISOString());
+    return reqModel.find({"Buyer": buyer, "Approved_On":  new Date(date)});
 }

@@ -24,8 +24,8 @@
                     return err;
                 });
         }
-        function addNote(note){
-            var url = "/api/add-note/:reqId";
+        function addNote(note, reqId){
+            var url = "/api/add-note/" + reqId ;
             console.log(note);
             return $http.post(url, note)
                 .then(function(response){

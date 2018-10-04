@@ -7,13 +7,14 @@
     console.log(navigator.userAgent)
     console.log("v0.3.5 as of 08/13/2018/1 12:22")
     var model = this;
-    this.inputParams = $routeParams
+    model.inputParams = $routeParams
     console.log(this.inputParams)
     try { 
       this.ifIE = String(navigator.userAgent).includes("Trident")
     } catch (err) {
       this.ifIE = true
     }
+
     console.log(this.ifIE)
     // incoming REQ, set by textbox
     this.inputReqid = "";
@@ -41,10 +42,8 @@
         6: "Denied Approval",
         7: "Under Initialization"
       }
-    // Total Sum of the REQ, calculated on the fly
-    this.totalSum = 0.0
     // Dictionary to hole the item data, key is item ID
-    this.itemData1 = {}
+    // this.itemData1 = {}
 
     model.redir = function() {
       window.location = "#!/buyeritems?reqid=" + model.inputReqid;
@@ -60,6 +59,7 @@
           .then(function(response){
             // Set REQ in this function
             model.REQJSON = response[0];
+            console.log(model.REQJSON);
             // Reset Total Sum
             model.totalSum = 0.0
           }).then(function() {
@@ -92,7 +92,7 @@
               model.title = "View REQ#" + model.REQJSON['REQ_No']
             }
             // Try Block will fail if no data, hide component and show alert in this case
-            catch (e) {
+            catch (error) {
               model.hideTables = true;
               model.foundData = false;
             }})}}

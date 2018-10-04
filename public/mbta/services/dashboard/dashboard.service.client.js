@@ -5,7 +5,7 @@
 
     function dashService($http) {
         var api = {
-            getDashboard: getDashboard
+            getDashboard: getDashboard,
         };
         return api;
 

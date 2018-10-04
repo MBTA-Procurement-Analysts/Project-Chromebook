@@ -3,7 +3,16 @@ var reqModel = require("./req-model");
 
 app.get('/api/req/:number', findReq);
 app.post('/api/add-note/:reqId', addNote);
-
+app.get('/api/req/buyer/:buyer/:date', getBuyerReqsForDate);
+function getBuyerReqsForDate(req,res){
+    console.log(req.params.date);
+    reqModel
+        .getBuyerReqsForDate(req.params.buyer,req.params.date)
+        .then(function(response){
+            console.log(response);
+            res.json(response);
+        })
+}
 function findReq(req,res){
     console.log("REQ NUMBER: " + req.params.number);
     console.log('wow we made it');
@@ -16,9 +25,14 @@ function findReq(req,res){
 }
 function addNote(req, res){
     console.log(req.body);
+
     reqModel
-        .addNote(req.params.number, req.body)
-        .then(function(val){
+        .addNote(req.params.reqId, req.body)
+        .then(function (val) {
             res.json(val);
-        })
+        }, function (err) {
+            console.log(err);
+            res.send(err);
+        });
 }
+

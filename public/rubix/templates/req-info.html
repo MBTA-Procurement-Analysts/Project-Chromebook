@@ -155,9 +155,11 @@
 
         <br/>
         <h4>User Notes: </h4>
-        <div ng-repeat="comment in model.REQJSON.UserNotes" class="row my-1">
+        <div ng-repeat="comment in model.REQJSON.User_Notes" class="row my-1">
             <div class="col-12">
-                User Notes: {{model.REQJSON.User_Notes}}
+                <b>{{comment.User}}</b>, {{model.formatDate(comment.Date)}}
+                {{comment.Note_Info}}
+
             </div>
         </div>
     </div>

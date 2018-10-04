@@ -60,6 +60,7 @@
           .then(function(response){
             // Set REQ in this function
             model.REQJSON = response[0];
+            console.log(model.REQJSON);
             // Reset Total Sum
             model.totalSum = 0.0
           }).then(function() {
@@ -123,12 +124,16 @@
             "Note_Info": model.note
         };
         console.log(note);
-        adminService.addNote(note)
+        adminService.addNote(note, this.inputParams.reqid)
             .then(
                // location.reload()
             )
     }
+    model.formatDate = function(dateInMil){
+        var date = new Date(dateInMil);
+        return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
 
+    }
 
     if (this.inputParams['reqid']) {
       this.inputReqid = this.inputParams['reqid'];
