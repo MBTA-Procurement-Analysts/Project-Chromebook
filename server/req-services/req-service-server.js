@@ -4,10 +4,20 @@ var reqModel = require("./req-model");
 app.get('/api/req/:number', findReq);
 app.post('/api/add-note/:reqId', addNote);
 app.get('/api/req/buyer/:buyer/:date', getBuyerReqsForDate);
+app.get('/api/req/date/:date', getReqsForDate);
+
 function getBuyerReqsForDate(req,res){
     console.log(req.params.date);
     reqModel
         .getBuyerReqsForDate(req.params.buyer,req.params.date)
+        .then(function(response){
+            console.log(response);
+            res.json(response);
+        })
+}
+function getReqsForDate(req,res){
+    reqModel
+        .getReqsForDate(req.params.date)
         .then(function(response){
             console.log(response);
             res.json(response);

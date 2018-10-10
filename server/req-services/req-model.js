@@ -4,7 +4,7 @@ var reqModel = mongoose.model('REQModel',reqSchema);
 reqModel.findReq = findReq;
 reqModel.addNote = addNote;
 reqModel.getBuyerReqsForDate = getBuyerReqsForDate;
-
+reqModel.getReqsForDate = getReqsForDate;
 module.exports = reqModel;
 
 function findReq(reqNumber){
@@ -30,4 +30,8 @@ function addNote(reqNumber, note){
 function getBuyerReqsForDate(buyer, date){
     console.log(buyer + " " + new Date(date).toISOString());
     return reqModel.find({"Buyer": buyer, "Approved_On":  new Date(date)});
+}
+
+function getReqsForDate(date){
+    return reqModel.find({"Approved_On":  new Date(date)});
 }

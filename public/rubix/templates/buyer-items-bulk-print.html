@@ -9,7 +9,7 @@
     <h5 class="col-4">Requisition Bulk Printing</h5>
     <div class="col-8 justify-content-end">
       <form ng-submit="model.redir()" class="d-flex" ng-hide="model.ifIE">
-        <input type="text" id="buyerIdInput" ng-model="model.inputBuyerId" name="buyerid" class="form-control mx-1" placeholder="Buyer Name" pattern="[_A-Za-z0-9\-]*">
+        <input type="text" id="buyerIdInput" ng-model="model.inputBuyerId" name="buyerid" class="form-control mx-1" placeholder="Buyer Name (Use * for all buyers)" pattern="[_A-Za-z0-9\-]*">
         <input data-provide="datepicker" data-date-format="mm-dd-yyyy" placeholder="Date" id="dateinput" name="dateinput" ng-model="model.inputDate" ng-change="model.log()" class="mx-1">
         <button type="button" class="btn btn-primary mx-1" ng-click="model.redir()"><i class="fas fa-search mx-1"></i>Search</button>
         <button type="button" class="btn btn-info mx-1" onclick="window.print()"><i class="fas fa-print mx-1"></i>Print</button>
@@ -26,7 +26,7 @@
   </div>
 
   <!--Hide Entire Component if invalid or initial render-->
-  <div ng-repeat="entry in model.ENTRIESJSON" ng-hide="model.hideTables" class="p-1 m-1 border" style="page-break-after: always">
+  <div ng-repeat="entry in model.ENTRIESJSON" ng-hide="model.hideTables" class="p-1 m-1 border" ng-style="!$last ? 'page-break-after: always' : ''">
     <!--The Ship to and Req Metadata Table-->
     <div class="row justify-content-between">
       <div class="col-4">

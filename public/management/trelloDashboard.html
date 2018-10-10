@@ -1,0 +1,557 @@
+<div class="container-fluid">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+
+    <h1>Trello Dashboard</h1>
+    <div id="tDash"></div>
+    <div id='stacked-bar'></div>
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script>
+        var initStackedBarChart = {
+            draw: function (config) {
+                me = this,
+                    domEle = config.element,
+                    stackKey = config.key,
+                    data = aggregation(config.data),
+                    margin = {top: 20, right: 20, bottom: 30, left: 150},
+                    width = 1800 - margin.left - margin.right,
+                    height = 600 - margin.top - margin.bottom,
+                    xScale = d3.scaleLinear().rangeRound([0, width]),
+                    yScale = d3.scaleBand().rangeRound([height, 0]).padding(0.1),
+                    xAxis = d3.axisBottom(xScale),
+                    yAxis = d3.axisLeft(yScale),
+                    svg = d3.select("#" + domEle).append("svg")
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                        .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                var stack = d3.stack()
+                    .keys(stackKey)
+                    .offset(d3.stackOffsetNone);
+
+                var layers = stack(data);
+                yScale.domain(data.map(function (d) {
+                    return d.Username;
+                }));
+                xScale.domain([0, 30]).nice();
+
+                var layer = svg.selectAll(".layer")
+                    .data(layers)
+                    .enter().append("g")
+                    .attr("class", "layer")
+                    .style("fill", function (d, i) {
+                        return modColor(i);
+                    });
+
+                layer.selectAll("rect")
+                    .data(function (d) {
+                        console.log(d.key);
+                        return d;
+                    })
+                    .enter().append("rect")
+                    .attr("y", function (d) {
+                        return yScale(d.data.Username);
+                    })
+                    .attr("x", function (d) {
+                        console.log(d);
+                        return xScale(d[0]);
+                    })
+                    .attr("height", yScale.bandwidth())
+                    .attr("width", function (d) {
+                        return xScale(d[1]) - xScale(d[0])
+                    });
+                svg.append("g")
+                    .attr("class", "axis axis--x")
+                    .attr("transform", "translate(0," + (height + 5) + ")")
+                    .call(xAxis);
+
+                svg.append("g")
+                    .attr("class", "axis axis--y")
+                    .attr("transform", "translate(0,0)")
+                    .call(yAxis);
+            }
+        }
+        function modColor(i){
+            console.log(i);
+            switch(i%4){
+                case 0:
+                    return "#EF767A";
+                    break;
+                case 1:
+                    return "#49BEAA";
+                    break;
+                case 2:
+                    return "#EEB868";
+                    break;
+                case 3:
+                    return "#73808E";
+                    break;
+                default:
+                    console.log("uh oh");
+            }
+        }
+        function aggregation(data){
+            var newCards = [];
+            for(d in data){
+                var greenCounts = 0;
+                var redCounts = 0;
+                var yellowCounts = 0;
+                var greyCounts = 0;
+                for(da in data[d]){
+                    switch(da.substr(da.length - 1)){
+                        case 'G':
+                            greenCounts = greenCounts + data[d][da];
+                            break;
+                        case 'Y':
+                            yellowCounts = yellowCounts + data[d][da];
+                            break;
+                        case 'R':
+                            redCounts = redCounts + data[d][da];
+                            break;
+                        case 'E':
+                            greyCounts = greyCounts + data[d][da];
+                            break;
+                        default:
+                            console.log('uh oh spaghettios!')
+                    }
+                };
+                newCards.push({"Username": data[d].Username, "Green": greenCounts, "Yellow": yellowCounts, "Red": redCounts, "Grey":greyCounts});
+                //console.log("g: "+ greenCounts + " y: " + yellowCounts + " r: "+ redCounts + " e: "+ greyCounts );
+            }
+            console.log(newCards);
+            return newCards;
+        }
+        var data = [
+            {
+                "Username": "tdionne1",
+                "Pipeline_R": 3,
+                "Pipeline_Y": 2,
+                "Pipeline_G": 2,
+                "Pipeline_E": 0,
+                "Preparation_R": 0,
+                "Preparation_Y": 0,
+                "Preparation_G": 0,
+                "Preparation_E": 1,
+                "Sourcing_R": 0,
+                "Sourcing_Y": 1,
+                "Sourcing_G": 0,
+                "Sourcing_E": 1,
+                "Insurance_R": 0,
+                "Insurance_Y": 0,
+                "Insurance_G": 0,
+                "Insurance_E": 0,
+                "Legal_R": 0,
+                "Legal_Y": 0,
+                "Legal_G": 0,
+                "Legal_E": 0,
+                "Response_R": 0,
+                "Response_Y": 0,
+                "Response_G": 0,
+                "Response_E": 0,
+                "Finalize_R": 1,
+                "Finalize_Y": 0,
+                "Finalize_G": 1,
+                "Finalize_E": 1,
+                "Complete_R": 0,
+                "Complete_Y": 0,
+                "Complete_G": 0,
+                "Complete_E": 0,
+                "Maintain_R": 3,
+                "Maintain_Y": 1,
+                "Maintain_G": 3,
+                "Maintain_E": 2,
+                "Change_R": 0,
+                "Change_Y": 0,
+                "Change_G": 0,
+                "Change_E": 0,
+                "CPO_R": 0,
+                "CPO_Y": 0,
+                "CPO_G": 0,
+                "CPO_E": 0
+            },
+            {
+                "Username": "joe21537099",
+                "Pipeline_R": 0,
+                "Pipeline_Y": 1,
+                "Pipeline_G": 0,
+                "Pipeline_E": 0,
+                "Preparation_R": 0,
+                "Preparation_Y": 1,
+                "Preparation_G": 0,
+                "Preparation_E": 1,
+                "Sourcing_R": 0,
+                "Sourcing_Y": 1,
+                "Sourcing_G": 1,
+                "Sourcing_E": 1,
+                "Insurance_R": 0,
+                "Insurance_Y": 0,
+                "Insurance_G": 0,
+                "Insurance_E": 0,
+                "Legal_R": 0,
+                "Legal_Y": 0,
+                "Legal_G": 0,
+                "Legal_E": 0,
+                "Response_R": 1,
+                "Response_Y": 0,
+                "Response_G": 0,
+                "Response_E": 0,
+                "Finalize_R": 1,
+                "Finalize_Y": 0,
+                "Finalize_G": 1,
+                "Finalize_E": 0,
+                "Complete_R": 0,
+                "Complete_Y": 0,
+                "Complete_G": 0,
+                "Complete_E": 0,
+                "Maintain_R": 2,
+                "Maintain_Y": 3,
+                "Maintain_G": 4,
+                "Maintain_E": 4,
+                "Change_R": 0,
+                "Change_Y": 1,
+                "Change_G": 2,
+                "Change_E": 1,
+                "CPO_R": 0,
+                "CPO_Y": 0,
+                "CPO_G": 0,
+                "CPO_E": 0
+            },
+            {
+                "Username": "robweiner1",
+                "Pipeline_R": 2,
+                "Pipeline_Y": 0,
+                "Pipeline_G": 1,
+                "Pipeline_E": 0,
+                "Preparation_R": 0,
+                "Preparation_Y": 1,
+                "Preparation_G": 1,
+                "Preparation_E": 0,
+                "Sourcing_R": 0,
+                "Sourcing_Y": 0,
+                "Sourcing_G": 0,
+                "Sourcing_E": 0,
+                "Insurance_R": 0,
+                "Insurance_Y": 0,
+                "Insurance_G": 0,
+                "Insurance_E": 0,
+                "Legal_R": 0,
+                "Legal_Y": 0,
+                "Legal_G": 0,
+                "Legal_E": 0,
+                "Response_R": 1,
+                "Response_Y": 0,
+                "Response_G": 1,
+                "Response_E": 0,
+                "Finalize_R": 0,
+                "Finalize_Y": 0,
+                "Finalize_G": 0,
+                "Finalize_E": 0,
+                "Complete_R": 0,
+                "Complete_Y": 0,
+                "Complete_G": 0,
+                "Complete_E": 0,
+                "Maintain_R": 2,
+                "Maintain_Y": 0,
+                "Maintain_G": 0,
+                "Maintain_E": 0,
+                "Change_R": 0,
+                "Change_Y": 0,
+                "Change_G": 0,
+                "Change_E": 0,
+                "CPO_R": 0,
+                "CPO_Y": 0,
+                "CPO_G": 0,
+                "CPO_E": 0
+            },
+            {
+                "Username": "ecook9",
+                "Pipeline_R": 1,
+                "Pipeline_Y": 2,
+                "Pipeline_G": 0,
+                "Pipeline_E": 1,
+                "Preparation_R": 0,
+                "Preparation_Y": 0,
+                "Preparation_G": 0,
+                "Preparation_E": 0,
+                "Sourcing_R": 0,
+                "Sourcing_Y": 0,
+                "Sourcing_G": 1,
+                "Sourcing_E": 0,
+                "Insurance_R": 0,
+                "Insurance_Y": 0,
+                "Insurance_G": 0,
+                "Insurance_E": 0,
+                "Legal_R": 0,
+                "Legal_Y": 0,
+                "Legal_G": 0,
+                "Legal_E": 0,
+                "Response_R": 1,
+                "Response_Y": 0,
+                "Response_G": 0,
+                "Response_E": 0,
+                "Finalize_R": 0,
+                "Finalize_Y": 0,
+                "Finalize_G": 1,
+                "Finalize_E": 0,
+                "Complete_R": 0,
+                "Complete_Y": 0,
+                "Complete_G": 0,
+                "Complete_E": 0,
+                "Maintain_R": 0,
+                "Maintain_Y": 1,
+                "Maintain_G": 0,
+                "Maintain_E": 0,
+                "Change_R": 0,
+                "Change_Y": 0,
+                "Change_G": 0,
+                "Change_E": 0,
+                "CPO_R": 0,
+                "CPO_Y": 0,
+                "CPO_G": 0,
+                "CPO_E": 0
+            },
+            {
+                "Username": "raywise3",
+                "Pipeline_R": 2,
+                "Pipeline_Y": 2,
+                "Pipeline_G": 0,
+                "Pipeline_E": 0,
+                "Preparation_R": 0,
+                "Preparation_Y": 2,
+                "Preparation_G": 0,
+                "Preparation_E": 0,
+                "Sourcing_R": 0,
+                "Sourcing_Y": 0,
+                "Sourcing_G": 0,
+                "Sourcing_E": 0,
+                "Insurance_R": 0,
+                "Insurance_Y": 0,
+                "Insurance_G": 0,
+                "Insurance_E": 0,
+                "Legal_R": 1,
+                "Legal_Y": 1,
+                "Legal_G": 1,
+                "Legal_E": 0,
+                "Response_R": 0,
+                "Response_Y": 0,
+                "Response_G": 0,
+                "Response_E": 1,
+                "Finalize_R": 0,
+                "Finalize_Y": 0,
+                "Finalize_G": 0,
+                "Finalize_E": 0,
+                "Complete_R": 0,
+                "Complete_Y": 0,
+                "Complete_G": 0,
+                "Complete_E": 0,
+                "Maintain_R": 1,
+                "Maintain_Y": 0,
+                "Maintain_G": 1,
+                "Maintain_E": 0,
+                "Change_R": 0,
+                "Change_Y": 0,
+                "Change_G": 0,
+                "Change_E": 0,
+                "CPO_R": 0,
+                "CPO_Y": 0,
+                "CPO_G": 0,
+                "CPO_E": 0
+            },
+            {
+                "Username": "ericwelsh6",
+                "Pipeline_R": 0,
+                "Pipeline_Y": 1,
+                "Pipeline_G": 0,
+                "Pipeline_E": 0,
+                "Preparation_R": 0,
+                "Preparation_Y": 2,
+                "Preparation_G": 0,
+                "Preparation_E": 0,
+                "Sourcing_R": 0,
+                "Sourcing_Y": 0,
+                "Sourcing_G": 0,
+                "Sourcing_E": 1,
+                "Insurance_R": 0,
+                "Insurance_Y": 0,
+                "Insurance_G": 0,
+                "Insurance_E": 0,
+                "Legal_R": 0,
+                "Legal_Y": 0,
+                "Legal_G": 0,
+                "Legal_E": 0,
+                "Response_R": 0,
+                "Response_Y": 2,
+                "Response_G": 1,
+                "Response_E": 3,
+                "Finalize_R": 0,
+                "Finalize_Y": 1,
+                "Finalize_G": 0,
+                "Finalize_E": 0,
+                "Complete_R": 0,
+                "Complete_Y": 0,
+                "Complete_G": 0,
+                "Complete_E": 0,
+                "Maintain_R": 0,
+                "Maintain_Y": 0,
+                "Maintain_G": 0,
+                "Maintain_E": 0,
+                "Change_R": 0,
+                "Change_Y": 0,
+                "Change_G": 0,
+                "Change_E": 0,
+                "CPO_R": 0,
+                "CPO_Y": 0,
+                "CPO_G": 0,
+                "CPO_E": 0
+            },
+            {
+                "Username": "mbernstein4",
+                "Pipeline_R": 0,
+                "Pipeline_Y": 0,
+                "Pipeline_G": 0,
+                "Pipeline_E": 0,
+                "Preparation_R": 0,
+                "Preparation_Y": 0,
+                "Preparation_G": 0,
+                "Preparation_E": 0,
+                "Sourcing_R": 0,
+                "Sourcing_Y": 0,
+                "Sourcing_G": 0,
+                "Sourcing_E": 0,
+                "Insurance_R": 0,
+                "Insurance_Y": 0,
+                "Insurance_G": 0,
+                "Insurance_E": 0,
+                "Legal_R": 0,
+                "Legal_Y": 0,
+                "Legal_G": 0,
+                "Legal_E": 0,
+                "Response_R": 1,
+                "Response_Y": 0,
+                "Response_G": 0,
+                "Response_E": 1,
+                "Finalize_R": 0,
+                "Finalize_Y": 0,
+                "Finalize_G": 0,
+                "Finalize_E": 0,
+                "Complete_R": 0,
+                "Complete_Y": 0,
+                "Complete_G": 0,
+                "Complete_E": 0,
+                "Maintain_R": 2,
+                "Maintain_Y": 6,
+                "Maintain_G": 2,
+                "Maintain_E": 2,
+                "Change_R": 0,
+                "Change_Y": 0,
+                "Change_G": 0,
+                "Change_E": 0,
+                "CPO_R": 0,
+                "CPO_Y": 0,
+                "CPO_G": 0,
+                "CPO_E": 0
+            },
+            {
+                "Username": "nicholaseasley",
+                "Pipeline_R": 0,
+                "Pipeline_Y": 0,
+                "Pipeline_G": 0,
+                "Pipeline_E": 0,
+                "Preparation_R": 0,
+                "Preparation_Y": 0,
+                "Preparation_G": 0,
+                "Preparation_E": 0,
+                "Sourcing_R": 0,
+                "Sourcing_Y": 0,
+                "Sourcing_G": 0,
+                "Sourcing_E": 0,
+                "Insurance_R": 0,
+                "Insurance_Y": 0,
+                "Insurance_G": 0,
+                "Insurance_E": 0,
+                "Legal_R": 0,
+                "Legal_Y": 0,
+                "Legal_G": 0,
+                "Legal_E": 0,
+                "Response_R": 0,
+                "Response_Y": 0,
+                "Response_G": 0,
+                "Response_E": 0,
+                "Finalize_R": 0,
+                "Finalize_Y": 0,
+                "Finalize_G": 0,
+                "Finalize_E": 0,
+                "Complete_R": 0,
+                "Complete_Y": 0,
+                "Complete_G": 0,
+                "Complete_E": 0,
+                "Maintain_R": 0,
+                "Maintain_Y": 0,
+                "Maintain_G": 1,
+                "Maintain_E": 0,
+                "Change_R": 0,
+                "Change_Y": 0,
+                "Change_G": 0,
+                "Change_E": 0,
+                "CPO_R": 0,
+                "CPO_Y": 0,
+                "CPO_G": 0,
+                "CPO_E": 0
+            }
+        ];
+        var key = ["Red", "Green", "Yellow", "Grey"];
+        /*var key = ["Pipeline_R",
+            "Pipeline_Y",
+            "Pipeline_G",
+            "Pipeline_E",
+            "Preparation_R",
+            "Preparation_Y",
+            "Preparation_G",
+            "Preparation_E",
+            "Sourcing_R",
+            "Sourcing_Y",
+            "Sourcing_G",
+            "Sourcing_E",
+            "Insurance_R",
+            "Insurance_Y",
+            "Insurance_G",
+            "Insurance_E",
+            "Legal_R",
+            "Legal_Y",
+            "Legal_G",
+            "Legal_E",
+            "Response_R",
+            "Response_Y",
+            "Response_G",
+            "Response_E",
+            "Finalize_R",
+            "Finalize_Y",
+            "Finalize_G",
+            "Finalize_E",
+            "Complete_R",
+            "Complete_Y",
+            "Complete_G",
+            "Complete_E",
+            "Maintain_R",
+            "Maintain_Y",
+            "Maintain_G",
+            "Maintain_E",
+            "Change_R",
+            "Change_Y",
+            "Change_G",
+            "Change_E",
+            "CPO_R",
+            "CPO_Y",
+            "CPO_G",
+            "CPO_E"];*/
+        initStackedBarChart.draw({
+            data: data,
+            key: key,
+            element: 'stacked-bar'
+        });
+
+     </script>
+
+
+</div>
