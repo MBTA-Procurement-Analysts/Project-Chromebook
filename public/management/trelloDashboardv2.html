@@ -1,10 +1,285 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+
+<style>
+    body {
+        font-family: 'Open Sans', sans-serif;
+    }
+    #main {
+        width: 960px;
+    }
+    .axis .domain {
+        display: none;
+    }
+</style>
+<div id="main">
+    <svg width="1500" height="900"></svg>
+</div>
+<script>
+    // create the svg
+    var svg = d3.select("svg"),
+        margin = {top: 20, right: 20, bottom: 30, left: 40},
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // set x scale
+    var y = d3.scaleBand()
+        .rangeRound([0, height])
+        .paddingInner(0.05)
+        .align(0.1);
+
+    // set y scale
+    var x = d3.scaleLinear()
+        .rangeRound([width, 0]);
+
+    function fib(data) {
+        var newCards = [];
+        var lists = ["Pipeline_R",
+            "Pipeline_Y",
+            "Pipeline_G",
+            "Pipeline_E",
+            "Preparation_R",
+            "Preparation_Y",
+            "Preparation_G",
+            "Preparation_E",
+            "Sourcing_R",
+            "Sourcing_Y",
+            "Sourcing_G",
+            "Sourcing_E",
+            "Insurance_R",
+            "Insurance_Y",
+            "Insurance_G",
+            "Insurance_E",
+            "Legal_R",
+            "Legal_Y",
+            "Legal_G",
+            "Legal_E",
+            "Response_R",
+            "Response_Y",
+            "Response_G",
+            "Response_E",
+            "Finalize_R",
+            "Finalize_Y",
+            "Finalize_G",
+            "Finalize_E",
+            "Complete_R",
+            "Complete_Y",
+            "Complete_G",
+            "Complete_E",
+            "Change_R",
+            "Change_Y",
+            "Change_G",
+            "Change_E",
+            "CPO_R",
+            "CPO_Y",
+            "CPO_G",
+            "CPO_E"];
+        for (person in data) {
+            stageList = {"Username": data[person].Username};
+            for (stage in lists) {
+                stageAmounts = 0;
+                switch (lists[stage].substr(lists[stage].length - 2, lists[stage].length)) {
+                    case "_R":
+                        stageAmounts = data[person][lists[stage]] * (13 / 5);
+                        break;
+                    case "_Y":
+                        stageAmounts = data[person][lists[stage]] * (8 / 5);
+                        break;
+                    case "_G":
+                        stageAmounts = data[person][lists[stage]];
+                        break;
+                    case "_E":
+                        stageAmounts = data[person][lists[stage]];
+                        break;
+                    default:
+                        console.log('uh oh');
+                }
+                //stageAmounts = data[person][lists[stage] + "_R"] * (13 / 5) + data[person][lists[stage] + "_Y"] * (8 / 5) + data[person][lists[stage] + "_G"] + data[person][lists[stage] + "_E"];
+                stageList[lists[stage]] = stageAmounts;
+            }
+            newCards.push(stageList);
+        }
+        //console.log(newCards);
+        return newCards;
+    }
+    // set the colors
+    function modColor(d) {
+        console.log(d);
+        switch (d.key.slice(0, -2)) {
+            case "Pipeline":
+                return "#EF767A";
+                break;
+            case "Preparation":
+                return "#49BEAA";
+                break;
+            case "Sourcing":
+                return "#EEB868";
+                break;
+            case "Insurance":
+                return "#73808E";
+                break;
+            case "Legal":
+                return "#801515";
+                break;
+            case "Response":
+                return "#552700";
+                break;
+            case "Finalize":
+                return "#FFAAAA";
+                break;
+            case "Complete":
+                return "#0D4D4D";
+                break;
+            case "Maintain":
+                return "#88CC88";
+                break;
+            case "Change":
+                return "#669999";
+                break;
+            case "CPO":
+                return "#FFD1AA";
+                break;
+            default:
+                console.log("uh oh");
+        }
+
+    }
+    // load the csv and create the chart
+    d3.json("/management/trello-cards-summary.json", function(error, data) {
+        console.log(error);
+        data = fib(data);
+        if (error) throw error;
+
+        var keys = ["Pipeline_R",
+            "Pipeline_Y",
+            "Pipeline_G",
+            "Pipeline_E",
+            "Preparation_R",
+            "Preparation_Y",
+            "Preparation_G",
+            "Preparation_E",
+            "Sourcing_R",
+            "Sourcing_Y",
+            "Sourcing_G",
+            "Sourcing_E",
+            "Insurance_R",
+            "Insurance_Y",
+            "Insurance_G",
+            "Insurance_E",
+            "Legal_R",
+            "Legal_Y",
+            "Legal_G",
+            "Legal_E",
+            "Response_R",
+            "Response_Y",
+            "Response_G",
+            "Response_E",
+            "Finalize_R",
+            "Finalize_Y",
+            "Finalize_G",
+            "Finalize_E",
+            "Complete_R",
+            "Complete_Y",
+            "Complete_G",
+            "Complete_E",
+            /* "Maintain_R",
+             "Maintain_Y",
+             "Maintain_G",
+             "Maintain_E", */
+            "Change_R",
+            "Change_Y",
+            "Change_G",
+            "Change_E",
+            "CPO_R",
+            "CPO_Y",
+            "CPO_G",
+            "CPO_E"];
+        console.log(data);
+        y.domain(data.map(function(d) { return d.Username; }));
+        x.domain([0, 26]).nice();
+
+        g.append("g")
+            .selectAll("g")
+            .data(d3.stack().keys(keys)(data))
+            .enter().append("g")
+            .attr("fill", function(d) { return modColor(d); })
+            .selectAll("rect")
+            .data(function(d) { return d; })
+            .enter().append("rect")
+            .attr("y", function(d) { return y(d.data.Username); })
+            .attr("x", function(d) { return x(d[1]); })
+            .attr("width", function(d) { return x(d[0]) - x(d[1]); })
+            .attr("height", y.bandwidth())
+            .on("mouseover", function() { tooltip.style("display", null); })
+            .on("mouseout", function() { tooltip.style("display", "none"); })
+            .on("mousemove", function(d) {
+                console.log(d3.mouse(this));
+                var xPosition = d3.mouse(this)[0] - 5;
+                var yPosition = d3.mouse(this)[1] - 5;
+                tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+                tooltip.select("text").text(function(d){
+                    return d[1]-d[0];
+                })
+            });
+
+        g.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        g.append("g")
+            .attr("class", "axis")
+            .call(d3.axisLeft(x).ticks(null, "s"))
+            .append("text")
+            .attr("y", 2)
+            .attr("x", x(x.ticks().pop()) + 0.5)
+            .attr("dx", "0.32em")
+            .attr("fill", "#000")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "start");
+/*
+        var legend = g.append("g")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", 10)
+            .attr("text-anchor", "end")
+            .selectAll("g")
+            .data(keys.slice().reverse())
+            .enter().append("g")
+            .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+        legend.append("rect")
+            .attr("x", width - 19)
+            .attr("width", 19)
+            .attr("height", 19)
+            .attr("fill", function(d){
+                console.l
+                modColor(d);
+            });
+
+        legend.append("text")
+            .attr("x", width - 24)
+            .attr("y", 9.5)
+            .attr("dy", "0.32em")
+            .text(function(d) { return d; });
+    */ });
+
+    // Prep the tooltip bits, initial display is hidden
+    var tooltip = svg.append("g")
+        .attr("class", "tooltip")
+        .style("display", "none");
+
+    tooltip.append("rect")
+        .attr("width", 60)
+        .attr("height", 20)
+        .attr("fill", "white")
+        .style("opacity", 0.5);
+
+    tooltip.append("text")
+        .attr("x", 30)
+        .attr("dy", "1.2em")
+        .style("text-anchor", "middle")
+        .attr("font-size", "12px")
+        .attr("font-weight", "bold");
+
+</script>

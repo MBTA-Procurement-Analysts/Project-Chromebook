@@ -113,6 +113,9 @@
                 }
             })
             .when('/trello', {
+                templateUrl: './management/plotly.html'
+            })
+            .when('/trello_old', {
                 templateUrl: './management/trelloDashboard.html'
             })
             .when('/edit-bid/:bidNumber', {

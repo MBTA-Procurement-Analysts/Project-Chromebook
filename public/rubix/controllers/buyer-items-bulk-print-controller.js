@@ -94,6 +94,9 @@
         try {
           let itemdata = {}
           for (line in req['lines']) {
+            if (req['lines'][line]['Item'] == "NaN") {
+              resolve(itemdata);
+            }
             getterService.findItem(req['lines'][line]['Item'])
               .then(function(response) {
                 var modifiedResponse = response[0];

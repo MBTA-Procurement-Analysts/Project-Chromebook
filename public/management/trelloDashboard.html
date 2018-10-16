@@ -1,21 +1,37 @@
 <div class="container-fluid">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <style>
+        tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            max-width: 45%;
+            padding: 8px;
 
+        }
+        .axis{
+            font: 24px sans-serif;
+        }
+    </style>
     <h1>Trello Dashboard</h1>
     <div id="tDash"></div>
     <div id='stacked-bar'></div>
     <script src="//d3js.org/d3.v4.min.js"></script>
     <script>
+        var ttip = d3.select('body').append('div')
+            .attr('class', 'tooltip')
+            .style('opacity', 1);
         var initStackedBarChart = {
             draw: function (config) {
                 me = this,
                     domEle = config.element,
                     stackKey = config.key,
-                    data = aggregation(config.data),
-                    margin = {top: 20, right: 20, bottom: 30, left: 150},
-                    width = 1800 - margin.left - margin.right,
-                    height = 600 - margin.top - margin.bottom,
+                    //data = aggregation(config.data),
+                    data = fib(config.data),
+                    margin = {top: 25, right: 25, bottom: 55, left: 180},
+                    width = 2000 - margin.left - margin.right,
+                    height = 900 - margin.top - margin.bottom,
                     xScale = d3.scaleLinear().rangeRound([0, width]),
                     yScale = d3.scaleBand().rangeRound([height, 0]).padding(0.1),
                     xAxis = d3.axisBottom(xScale),
@@ -28,25 +44,34 @@
 
                 var stack = d3.stack()
                     .keys(stackKey)
+                    .value(function(d, key){return d[key];})
                     .offset(d3.stackOffsetNone);
 
                 var layers = stack(data);
+                console.log(layers);
                 yScale.domain(data.map(function (d) {
                     return d.Username;
                 }));
-                xScale.domain([0, 30]).nice();
+                xScale.domain([0, 100]).nice();
 
                 var layer = svg.selectAll(".layer")
                     .data(layers)
                     .enter().append("g")
                     .attr("class", "layer")
-                    .style("fill", function (d, i) {
-                        return modColor(i);
+                    .attr("id", function (d, i) {
+                        return d.key;
+                    })
+                    .style("fill", function (d) {
+                        return modColor(d);
+                    })
+                    .on('mouseout', mouseout())
+                    .on('mousemove', function (d, i, j) {
+                        //console.log(this);
+                        mousemove(d, i, d.Username);
                     });
 
                 layer.selectAll("rect")
                     .data(function (d) {
-                        console.log(d.key);
                         return d;
                     })
                     .enter().append("rect")
@@ -54,74 +79,196 @@
                         return yScale(d.data.Username);
                     })
                     .attr("x", function (d) {
-                        console.log(d);
                         return xScale(d[0]);
                     })
+                    .attr("stroke", "black")
                     .attr("height", yScale.bandwidth())
                     .attr("width", function (d) {
                         return xScale(d[1]) - xScale(d[0])
                     });
+
+                //.on("mouseover", hover())
+
+                layer.selectAll("text")
+                    .data(function (d) {
+                        return d;
+                    })
+                    .enter().append("text")
+                    .attr("y", function (d) {
+                        return yScale(d.data.Username) + 10;
+                    })
+                    .attr("x", function (d) {
+                        return xScale(d[0]) + 20;
+                    })
+                    .attr("dy", ".35em")
+                    .style("color", "black")
+                    .attr("fill", "white")
+                    .text(function(d, i){
+                        console.log(d, i);
+                        return d[1] - d[0];
+                    });
+
+
                 svg.append("g")
                     .attr("class", "axis axis--x")
                     .attr("transform", "translate(0," + (height + 5) + ")")
-                    .call(xAxis);
+
+                        .call(xAxis);
 
                 svg.append("g")
                     .attr("class", "axis axis--y")
                     .attr("transform", "translate(0,0)")
-                    .call(yAxis);
+                        .call(yAxis);
             }
+        };
+
+        function mousemove(d, i, name) {
+            console.log(d);
+            ttip.transition()
+                .duration(50)
+                .style('opacity', 1);
+            for(vals in d){
+                var width  = d[vals][1] - d[vals][0];
+                switch(d.key.substr(d.key.length-1,d.key.length)){
+                    case 'G':
+                        var modif = 5;
+                        break;
+                    case 'Y':
+                        var modif = 8;
+                        break;
+                    case 'R':
+                        var modif = 13;
+                        break;
+                    default:
+                        var modif = 1;
+                }
+                ttip.html(d.key.substr(0, d.key.length-2) + ": " + (width/modif) );
+
+            }
+            /*
+            .style('left', (d3.event.pageX + 15) + 'px')
+            .style('top', (d3.event.pageY) + 'px');
+            */
         }
-        function modColor(i){
-            console.log(i);
-            switch(i%4){
-                case 0:
+
+        function mouseout() {
+            ttip.transition()
+                .duration(50)
+                .style('opacity', 0);
+        }
+
+        function modColor(d) {
+            switch (d.key.slice(0, -2)) {
+                case "Pipeline":
                     return "#EF767A";
                     break;
-                case 1:
+                case "Preparation":
                     return "#49BEAA";
                     break;
-                case 2:
+                case "Sourcing":
                     return "#EEB868";
                     break;
-                case 3:
+                case "Insurance":
                     return "#73808E";
+                    break;
+                case "Legal":
+                    return "#801515";
+                    break;
+                case "Response":
+                    return "#552700";
+                    break;
+                case "Finalize":
+                    return "#FFAAAA";
+                    break;
+                case "Complete":
+                    return "#0D4D4D";
+                    break;
+                case "Maintain":
+                    return "#88CC88";
+                    break;
+                case "Change":
+                    return "#669999";
+                    break;
+                case "CPO":
+                    return "#FFD1AA";
                     break;
                 default:
                     console.log("uh oh");
             }
+
         }
-        function aggregation(data){
+
+        function fib(data) {
             var newCards = [];
-            for(d in data){
-                var greenCounts = 0;
-                var redCounts = 0;
-                var yellowCounts = 0;
-                var greyCounts = 0;
-                for(da in data[d]){
-                    switch(da.substr(da.length - 1)){
-                        case 'G':
-                            greenCounts = greenCounts + data[d][da];
+            var lists = ["Pipeline_R",
+                "Pipeline_Y",
+                "Pipeline_G",
+                "Pipeline_E",
+                "Preparation_R",
+                "Preparation_Y",
+                "Preparation_G",
+                "Preparation_E",
+                "Sourcing_R",
+                "Sourcing_Y",
+                "Sourcing_G",
+                "Sourcing_E",
+                "Insurance_R",
+                "Insurance_Y",
+                "Insurance_G",
+                "Insurance_E",
+                "Legal_R",
+                "Legal_Y",
+                "Legal_G",
+                "Legal_E",
+                "Response_R",
+                "Response_Y",
+                "Response_G",
+                "Response_E",
+                "Finalize_R",
+                "Finalize_Y",
+                "Finalize_G",
+                "Finalize_E",
+                "Complete_R",
+                "Complete_Y",
+                "Complete_G",
+                "Complete_E",
+                "Change_R",
+                "Change_Y",
+                "Change_G",
+                "Change_E",
+                "CPO_R",
+                "CPO_Y",
+                "CPO_G",
+                "CPO_E"];
+            for (person in data) {
+                stageList = {"Username": data[person].Username};
+                for (stage in lists) {
+                    stageAmounts = 0;
+                    switch (lists[stage].substr(lists[stage].length - 2, lists[stage].length)) {
+                        case "_R":
+                            stageAmounts = data[person][lists[stage]] * 13;
                             break;
-                        case 'Y':
-                            yellowCounts = yellowCounts + data[d][da];
+                        case "_Y":
+                            stageAmounts = data[person][lists[stage]] * 8;
                             break;
-                        case 'R':
-                            redCounts = redCounts + data[d][da];
+                        case "_G":
+                            stageAmounts = data[person][lists[stage]] * 5;
                             break;
-                        case 'E':
-                            greyCounts = greyCounts + data[d][da];
+                        case "_E":
+                            stageAmounts = data[person][lists[stage]];
                             break;
                         default:
-                            console.log('uh oh spaghettios!')
+                            console.log('uh oh');
                     }
-                };
-                newCards.push({"Username": data[d].Username, "Green": greenCounts, "Yellow": yellowCounts, "Red": redCounts, "Grey":greyCounts});
-                //console.log("g: "+ greenCounts + " y: " + yellowCounts + " r: "+ redCounts + " e: "+ greyCounts );
+                    //stageAmounts = data[person][lists[stage] + "_R"] * (13 / 5) + data[person][lists[stage] + "_Y"] * (8 / 5) + data[person][lists[stage] + "_G"] + data[person][lists[stage] + "_E"];
+                    stageList[lists[stage]] = stageAmounts;
+                }
+                newCards.push(stageList);
             }
-            console.log(newCards);
+            //console.log(newCards);
             return newCards;
         }
+
         var data = [
             {
                 "Username": "tdionne1",
@@ -500,8 +647,10 @@
                 "CPO_E": 0
             }
         ];
-        var key = ["Red", "Green", "Yellow", "Grey"];
-        /*var key = ["Pipeline_R",
+        //var key = ["Pipeline", "Preparation", "Sourcing", "Insurance", "Legal", "Response", "Finalize", "Complete", "Maintain", "Change", "CPO"];
+
+        //var key = ["Red", "Green", "Yellow", "Grey"];
+        var key = ["Pipeline_R",
             "Pipeline_Y",
             "Pipeline_G",
             "Pipeline_E",
@@ -533,10 +682,10 @@
             "Complete_Y",
             "Complete_G",
             "Complete_E",
-            "Maintain_R",
-            "Maintain_Y",
-            "Maintain_G",
-            "Maintain_E",
+            /* "Maintain_R",
+             "Maintain_Y",
+             "Maintain_G",
+             "Maintain_E", */
             "Change_R",
             "Change_Y",
             "Change_G",
@@ -544,14 +693,54 @@
             "CPO_R",
             "CPO_Y",
             "CPO_G",
-            "CPO_E"];*/
+            "CPO_E"];
+
         initStackedBarChart.draw({
             data: data,
             key: key,
             element: 'stacked-bar'
         });
-
-     </script>
+        /*
+                function aggregation(data) {
+                    var newCards = [];
+                    for (d in data) {
+                        var greenCounts = 0;
+                        var redCounts = 0;
+                        var yellowCounts = 0;
+                        var greyCounts = 0;
+                        for (da in data[d]) {
+                            switch (da.substr(da.length - 1)) {
+                                case 'G':
+                                    greenCounts = greenCounts + data[d][da];
+                                    break;
+                                case 'Y':
+                                    yellowCounts = yellowCounts + data[d][da];
+                                    break;
+                                case 'R':
+                                    redCounts = redCounts + data[d][da];
+                                    break;
+                                case 'E':
+                                    greyCounts = greyCounts + data[d][da];
+                                    break;
+                                default:
+                                    console.log('uh oh spaghettios!')
+                            }
+                        }
+                        ;
+                        newCards.push({
+                            "Username": data[d].Username,
+                            "Green": greenCounts,
+                            "Yellow": yellowCounts,
+                            "Red": redCounts,
+                            "Grey": greyCounts
+                        });
+                        //console.log("g: "+ greenCounts + " y: " + yellowCounts + " r: "+ redCounts + " e: "+ greyCounts );
+                    }
+                    console.log(newCards);
+                    return newCards;
+                }
+        */
+    </script>
 
 
 </div>

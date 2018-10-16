@@ -120,7 +120,7 @@ function formatBySE() {
     }
     fs.writeFileSync('./public/management/trello-cards.json', JSON.stringify(toReturn, "utf-8"))
 }
-
+summaryGenerator();
 function summaryGenerator() {
     var cards = JSON.parse(fs.readFileSync("public/management/trello-cards.json", "utf-8"));
     var summary = [];
