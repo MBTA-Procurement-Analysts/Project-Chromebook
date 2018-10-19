@@ -3,7 +3,7 @@
     .module('Chrubix')
     .controller('buyerItemsBulkPrintController', buyerItemsBulkPrintController)
 
-  function buyerItemsBulkPrintController(getterService, $routeParams, $q, $scope) {//currentUser){
+  function buyerItemsBulkPrintController(getterService, $routeParams) {//currentUser){
     var model = this;
     model.inputParams = $routeParams
     try { 
@@ -12,7 +12,6 @@
       this.ifIE = true
     }
 
-    console.log(this.ifIE)
     // Whether to hide the REQ Details view, true initially and when REQ is null
     this.hideTables = true;
     // Whether the REQ is valid, used to control the alert

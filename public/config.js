@@ -112,10 +112,10 @@
                     currentUser: checkCurrentUser
                 }
             })
-            .when('/trello', {
+            .when('/trello_plotly', {
                 templateUrl: './management/plotly.html'
             })
-            .when('/trello_old', {
+            .when('/trello', {
                 templateUrl: './management/trelloDashboard.html'
             })
             .when('/edit-bid/:bidNumber', {

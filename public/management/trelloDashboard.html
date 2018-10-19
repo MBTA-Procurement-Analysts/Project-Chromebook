@@ -2,32 +2,100 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
     <style>
-        tooltip {
+        .tooltip {
             position: absolute;
             text-align: center;
             width: auto;
             max-width: 45%;
             padding: 8px;
-
+            background: white;
+            border: 1px solid black;
+            font: 16px sans-serif;
         }
-        .axis{
+
+        .axis {
             font: 24px sans-serif;
         }
+
+        .country-name {
+            margin: 0 !important;
+        }
+
+        .key-dot {
+            display: inline-block;
+            height: 20px;
+            margin-right: .5em;
+            width: 20px;
+        }
+
+        .pipeline {
+            background: #FFAAAA;
+        }
+
+        .preparation {
+            background: #D46A6A;
+        }
+
+        .sourcing {
+            background: #D46A6A;
+        }
+
+        .insurance {
+            background: #550000;
+        }
+
+        .legal {
+            background: #440027;
+        }
+
+        .response {
+            background: #661141;
+        }
+
+        .finalize {
+            background: #882d61;
+        }
+
+        .complete {
+            background: #aa5585;
+        }
+
+        .maintain {
+            background: #cd88af;
+        }
+
+        .change {
+            background: #ffd1aa;
+        }
+
+        .cpo {
+            background: #d49a6a;
+        }
+
+        #legend2 {
+            overflow: hidden;
+        }
+
+        .legend2 {
+            float: left;
+            margin-right: 1em;
+        }
     </style>
-    <h1>Trello Dashboard</h1>
+    <h1 class="text-center">Trello Dashboard (Difficulty is currently randomly assigned)</h1>
     <div id="tDash"></div>
     <div id='stacked-bar'></div>
     <script src="//d3js.org/d3.v4.min.js"></script>
     <script>
+        //initialize the div that will become the tooltip
         var ttip = d3.select('body').append('div')
             .attr('class', 'tooltip')
             .style('opacity', 1);
+
         var initStackedBarChart = {
             draw: function (config) {
                 me = this,
                     domEle = config.element,
                     stackKey = config.key,
-                    //data = aggregation(config.data),
                     data = fib(config.data),
                     margin = {top: 25, right: 25, bottom: 55, left: 180},
                     width = 2000 - margin.left - margin.right,
@@ -42,16 +110,19 @@
                         .append("g")
                         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+                // this is the initialization for a stacked bar chart
                 var stack = d3.stack()
                     .keys(stackKey)
-                    .value(function(d, key){return d[key];})
+                    .value(function (d, key) {
+                        return d[key];
+                    })
                     .offset(d3.stackOffsetNone);
 
                 var layers = stack(data);
-                console.log(layers);
                 yScale.domain(data.map(function (d) {
                     return d.Username;
                 }));
+                // this sets the x scale to be up to 100 difficulty level,
                 xScale.domain([0, 100]).nice();
 
                 var layer = svg.selectAll(".layer")
@@ -65,9 +136,22 @@
                         return modColor(d);
                     })
                     .on('mouseout', mouseout())
-                    .on('mousemove', function (d, i, j) {
-                        //console.log(this);
-                        mousemove(d, i, d.Username);
+                    .on('mousemove', function (d) {
+                        ttip.transition()
+                            .duration(50)
+                            .style('opacity', 1);
+                        var text = "";
+                        if (d.key.substr(d.key.length - 1, d.key.length) == 'R') {
+                            text += "Difficult Projects in ";
+                        } else if (d.key.substr(d.key.length - 1, d.key.length) == 'Y') {
+                            text += "Medium Projects in ";
+                        } else if (d.key.substr(d.key.length - 1, d.key.length) == 'G') {
+                            text += "Simple Projects in ";
+                        } else {
+                            text += "Inactionable Projects in "
+                        }
+                        text += d.key.substr(0, d.key.length - 2) + " Stage";
+                        displayTooltip(text);
                     });
 
                 layer.selectAll("rect")
@@ -87,15 +171,13 @@
                         return xScale(d[1]) - xScale(d[0])
                     });
 
-                //.on("mouseover", hover())
-
                 layer.selectAll("text")
                     .data(function (d) {
                         return d;
                     })
                     .enter().append("text")
                     .attr("y", function (d) {
-                        return yScale(d.data.Username) + 10;
+                        return yScale(d.data.Username) + 20;
                     })
                     .attr("x", function (d) {
                         return xScale(d[0]) + 20;
@@ -103,53 +185,35 @@
                     .attr("dy", ".35em")
                     .style("color", "black")
                     .attr("fill", "white")
-                    .text(function(d, i){
-                        console.log(d, i);
-                        return d[1] - d[0];
+                    .text(function (d, i) {
+                        var fibVal = (d[1] - d[0]);
+                        if (fibVal % 13 == 0) {
+                            return fibVal / 13;
+                        } else if (fibVal % 8 == 0) {
+                            return fibVal / 8;
+                        } else if (fibVal % 5 == 0) {
+                            return fibVal / 5;
+                        } else {
+                            return fibVal;
+                        }
                     });
-
-
                 svg.append("g")
                     .attr("class", "axis axis--x")
                     .attr("transform", "translate(0," + (height + 5) + ")")
-
-                        .call(xAxis);
+                    .call(xAxis);
+                svg.append('text')
+                    .attr('transform', 'translate(' + (width - 100) + " ," + (height + margin.top + 25) + ')')
+                    .style('text-anchor', 'middle')
+                    .style('font', '24px sans-serif')
+                    .text("Difficulty");
 
                 svg.append("g")
                     .attr("class", "axis axis--y")
                     .attr("transform", "translate(0,0)")
-                        .call(yAxis);
+                    .call(yAxis);
             }
         };
 
-        function mousemove(d, i, name) {
-            console.log(d);
-            ttip.transition()
-                .duration(50)
-                .style('opacity', 1);
-            for(vals in d){
-                var width  = d[vals][1] - d[vals][0];
-                switch(d.key.substr(d.key.length-1,d.key.length)){
-                    case 'G':
-                        var modif = 5;
-                        break;
-                    case 'Y':
-                        var modif = 8;
-                        break;
-                    case 'R':
-                        var modif = 13;
-                        break;
-                    default:
-                        var modif = 1;
-                }
-                ttip.html(d.key.substr(0, d.key.length-2) + ": " + (width/modif) );
-
-            }
-            /*
-            .style('left', (d3.event.pageX + 15) + 'px')
-            .style('top', (d3.event.pageY) + 'px');
-            */
-        }
 
         function mouseout() {
             ttip.transition()
@@ -160,37 +224,37 @@
         function modColor(d) {
             switch (d.key.slice(0, -2)) {
                 case "Pipeline":
-                    return "#EF767A";
-                    break;
-                case "Preparation":
-                    return "#49BEAA";
-                    break;
-                case "Sourcing":
-                    return "#EEB868";
-                    break;
-                case "Insurance":
-                    return "#73808E";
-                    break;
-                case "Legal":
-                    return "#801515";
-                    break;
-                case "Response":
-                    return "#552700";
-                    break;
-                case "Finalize":
                     return "#FFAAAA";
                     break;
+                case "Preparation":
+                    return "#D46A6A";
+                    break;
+                case "Sourcing":
+                    return "#AA3939";
+                    break;
+                case "Insurance":
+                    return "#550000";
+                    break;
+                case "Legal":
+                    return "#440027";
+                    break;
+                case "Response":
+                    return "#661141";
+                    break;
+                case "Finalize":
+                    return "#882d61";
+                    break;
                 case "Complete":
-                    return "#0D4D4D";
+                    return "#aa5585";
                     break;
                 case "Maintain":
-                    return "#88CC88";
+                    return "#cd88af";
                     break;
                 case "Change":
-                    return "#669999";
+                    return "#ffd1aa";
                     break;
                 case "CPO":
-                    return "#FFD1AA";
+                    return "#d49a6a";
                     break;
                 default:
                     console.log("uh oh");
@@ -242,6 +306,7 @@
                 "CPO_E"];
             for (person in data) {
                 stageList = {"Username": data[person].Username};
+                personTotal = 0;
                 for (stage in lists) {
                     stageAmounts = 0;
                     switch (lists[stage].substr(lists[stage].length - 2, lists[stage].length)) {
@@ -262,11 +327,19 @@
                     }
                     //stageAmounts = data[person][lists[stage] + "_R"] * (13 / 5) + data[person][lists[stage] + "_Y"] * (8 / 5) + data[person][lists[stage] + "_G"] + data[person][lists[stage] + "_E"];
                     stageList[lists[stage]] = stageAmounts;
+                    personTotal += 1;
                 }
+                stageList.Total = personTotal;
                 newCards.push(stageList);
             }
             //console.log(newCards);
             return newCards;
+        }
+
+        function displayTooltip(text) {
+            ttip.html(text).style("left", (event.clientX) + "px")
+                .style("top", (event.clientY) + "px");
+            //console.log(linkTrelloTitles('tdionne1', 0, 'R'));
         }
 
         var data = [
@@ -700,47 +773,59 @@
             key: key,
             element: 'stacked-bar'
         });
-        /*
-                function aggregation(data) {
-                    var newCards = [];
-                    for (d in data) {
-                        var greenCounts = 0;
-                        var redCounts = 0;
-                        var yellowCounts = 0;
-                        var greyCounts = 0;
-                        for (da in data[d]) {
-                            switch (da.substr(da.length - 1)) {
-                                case 'G':
-                                    greenCounts = greenCounts + data[d][da];
-                                    break;
-                                case 'Y':
-                                    yellowCounts = yellowCounts + data[d][da];
-                                    break;
-                                case 'R':
-                                    redCounts = redCounts + data[d][da];
-                                    break;
-                                case 'E':
-                                    greyCounts = greyCounts + data[d][da];
-                                    break;
-                                default:
-                                    console.log('uh oh spaghettios!')
-                            }
+
+        function linkTrelloTitles(SEname, stage, difficulty) {
+            d3.json('management/trello-cards.json', function (error, data) {
+                for (person in data) {
+                    if (data[person].Username === SEname) {
+                        var cardTitlesAndLinks = [];
+                        var allCards = JSON.stringify(data[person].Cards);
+                        console.log(allCards);
+                        for (cards in allCards) {
                         }
-                        ;
-                        newCards.push({
-                            "Username": data[d].Username,
-                            "Green": greenCounts,
-                            "Yellow": yellowCounts,
-                            "Red": redCounts,
-                            "Grey": greyCounts
-                        });
-                        //console.log("g: "+ greenCounts + " y: " + yellowCounts + " r: "+ redCounts + " e: "+ greyCounts );
                     }
-                    console.log(newCards);
-                    return newCards;
                 }
-        */
+            })
+        }
     </script>
 
 
 </div>
+<div class="container">
+    <div id="legend2">
+        <h3>Legend</h3>
+        <div class="legend2"><p class="country-name"><span class="key-dot pipeline"></span>Pipeline</p></div>
+        <div class="legend2"><p class="country-name"><span class="key-dot preparation"></span>Preparation</p></div>
+        <div class="legend2"><p class="country-name"><span class="key-dot sourcing"></span>Sourcing</p></div>
+        <div class="legend2"><p class="country-name"><span class="key-dot insurance"></span>Insurance</p></div>
+        <div class="legend2"><p class="country-name"><span class="key-dot legal"></span>Legal</p></div>
+        <div class="legend2"><p class="country-name"><span class="key-dot response"></span>Response</p></div>
+        <div class="legend2"><p class="country-name"><span class="key-dot finalize"></span>Finalize</p></div>
+        <div class="legend2"><p class="country-name"><span class="key-dot complete"></span>Complete</p></div>
+        <div class="legend2"><p class="country-name"><span class="key-dot change"></span>Change</p></div>
+        <div class="legend2"><p class="country-name"><span class="key-dot cpo"></span>CPO</p></div>
+        <br/>
+        <br/>
+
+        <div>
+            <svg width="233" height = "91">
+                <rect width='233' height='91' stroke='black' fill="white"></rect>
+            </svg>
+            <svg width ='144' height = "91">
+                <rect width='144' height='91' stroke='black' fill="white">Medium</rect>
+            </svg>
+            <svg width="90" height = "91">
+                <rect width='90' height='91' stroke='black' fill='white'>Simple</rect>
+            </svg>
+            <svg width="17" height = "91">
+                <rect width='17' height='91' stroke='black' fill='white'>Inactionable</rect>
+            </svg>
+            <!--<p>Difficult  Medium Simple Inactionable</p>-->
+        </div>
+        <div class="legend2"><p>Difficult (13),&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Medium (8),&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Simple (5),&nbsp&nbsp Inactionable (1) </p></div>
+        <br/>
+    </div>
+    <br/>
+    <br/>
+</div>
+
