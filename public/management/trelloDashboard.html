@@ -81,7 +81,10 @@
             margin-right: 1em;
         }
     </style>
-    <h1 class="text-center">Trello Dashboard (Difficulty is currently randomly assigned)</h1>
+    <h1 class="text-center">Trello Dashboard</h1>
+    <p>This visualization shows the workload of each Sourcing Executive. The length of the bar as well as the number within the bar indicates the number of projects in a particular stage of the sourcing process, and the color indicates this stage.
+        These bars are created so that a difficult project is 13 difficulty points, a medium project is 8, a simple project is 5, and an inactionable project is 2.
+    </p>
     <div id="tDash"></div>
     <div id='stacked-bar'></div>
     <script src="//d3js.org/d3.v4.min.js"></script>
@@ -90,6 +93,7 @@
         var ttip = d3.select('body').append('div')
             .attr('class', 'tooltip')
             .style('opacity', 1);
+        d3.json("/management/trello-cards-summary.json",function(error, data){
 
         var initStackedBarChart = {
             draw: function (config) {
@@ -180,12 +184,11 @@
                         return yScale(d.data.Username) + 20;
                     })
                     .attr("x", function (d) {
-                        return xScale(d[0]) + 20;
+                        return xScale(d[0]) + 10;
                     })
                     .attr("dy", ".35em")
-                    .style("color", "black")
                     .attr("fill", "white")
-                    .text(function (d, i) {
+                    .text(function (d) {
                         var fibVal = (d[1] - d[0]);
                         if (fibVal % 13 == 0) {
                             return fibVal / 13;
@@ -194,13 +197,15 @@
                         } else if (fibVal % 5 == 0) {
                             return fibVal / 5;
                         } else {
-                            return fibVal;
+                            return fibVal /2;
                         }
                     });
+
                 svg.append("g")
                     .attr("class", "axis axis--x")
                     .attr("transform", "translate(0," + (height + 5) + ")")
                     .call(xAxis);
+
                 svg.append('text')
                     .attr('transform', 'translate(' + (width - 100) + " ," + (height + margin.top + 25) + ')')
                     .style('text-anchor', 'middle')
@@ -211,6 +216,7 @@
                     .attr("class", "axis axis--y")
                     .attr("transform", "translate(0,0)")
                     .call(yAxis);
+
             }
         };
 
@@ -320,19 +326,17 @@
                             stageAmounts = data[person][lists[stage]] * 5;
                             break;
                         case "_E":
-                            stageAmounts = data[person][lists[stage]];
+                            stageAmounts = data[person][lists[stage]] * 2;
                             break;
                         default:
                             console.log('uh oh');
                     }
-                    //stageAmounts = data[person][lists[stage] + "_R"] * (13 / 5) + data[person][lists[stage] + "_Y"] * (8 / 5) + data[person][lists[stage] + "_G"] + data[person][lists[stage] + "_E"];
                     stageList[lists[stage]] = stageAmounts;
-                    personTotal += 1;
+                    personTotal += data[person][lists[stage]];
                 }
                 stageList.Total = personTotal;
                 newCards.push(stageList);
             }
-            //console.log(newCards);
             return newCards;
         }
 
@@ -342,384 +346,7 @@
             //console.log(linkTrelloTitles('tdionne1', 0, 'R'));
         }
 
-        var data = [
-            {
-                "Username": "tdionne1",
-                "Pipeline_R": 3,
-                "Pipeline_Y": 2,
-                "Pipeline_G": 2,
-                "Pipeline_E": 0,
-                "Preparation_R": 0,
-                "Preparation_Y": 0,
-                "Preparation_G": 0,
-                "Preparation_E": 1,
-                "Sourcing_R": 0,
-                "Sourcing_Y": 1,
-                "Sourcing_G": 0,
-                "Sourcing_E": 1,
-                "Insurance_R": 0,
-                "Insurance_Y": 0,
-                "Insurance_G": 0,
-                "Insurance_E": 0,
-                "Legal_R": 0,
-                "Legal_Y": 0,
-                "Legal_G": 0,
-                "Legal_E": 0,
-                "Response_R": 0,
-                "Response_Y": 0,
-                "Response_G": 0,
-                "Response_E": 0,
-                "Finalize_R": 1,
-                "Finalize_Y": 0,
-                "Finalize_G": 1,
-                "Finalize_E": 1,
-                "Complete_R": 0,
-                "Complete_Y": 0,
-                "Complete_G": 0,
-                "Complete_E": 0,
-                "Maintain_R": 3,
-                "Maintain_Y": 1,
-                "Maintain_G": 3,
-                "Maintain_E": 2,
-                "Change_R": 0,
-                "Change_Y": 0,
-                "Change_G": 0,
-                "Change_E": 0,
-                "CPO_R": 0,
-                "CPO_Y": 0,
-                "CPO_G": 0,
-                "CPO_E": 0
-            },
-            {
-                "Username": "joe21537099",
-                "Pipeline_R": 0,
-                "Pipeline_Y": 1,
-                "Pipeline_G": 0,
-                "Pipeline_E": 0,
-                "Preparation_R": 0,
-                "Preparation_Y": 1,
-                "Preparation_G": 0,
-                "Preparation_E": 1,
-                "Sourcing_R": 0,
-                "Sourcing_Y": 1,
-                "Sourcing_G": 1,
-                "Sourcing_E": 1,
-                "Insurance_R": 0,
-                "Insurance_Y": 0,
-                "Insurance_G": 0,
-                "Insurance_E": 0,
-                "Legal_R": 0,
-                "Legal_Y": 0,
-                "Legal_G": 0,
-                "Legal_E": 0,
-                "Response_R": 1,
-                "Response_Y": 0,
-                "Response_G": 0,
-                "Response_E": 0,
-                "Finalize_R": 1,
-                "Finalize_Y": 0,
-                "Finalize_G": 1,
-                "Finalize_E": 0,
-                "Complete_R": 0,
-                "Complete_Y": 0,
-                "Complete_G": 0,
-                "Complete_E": 0,
-                "Maintain_R": 2,
-                "Maintain_Y": 3,
-                "Maintain_G": 4,
-                "Maintain_E": 4,
-                "Change_R": 0,
-                "Change_Y": 1,
-                "Change_G": 2,
-                "Change_E": 1,
-                "CPO_R": 0,
-                "CPO_Y": 0,
-                "CPO_G": 0,
-                "CPO_E": 0
-            },
-            {
-                "Username": "robweiner1",
-                "Pipeline_R": 2,
-                "Pipeline_Y": 0,
-                "Pipeline_G": 1,
-                "Pipeline_E": 0,
-                "Preparation_R": 0,
-                "Preparation_Y": 1,
-                "Preparation_G": 1,
-                "Preparation_E": 0,
-                "Sourcing_R": 0,
-                "Sourcing_Y": 0,
-                "Sourcing_G": 0,
-                "Sourcing_E": 0,
-                "Insurance_R": 0,
-                "Insurance_Y": 0,
-                "Insurance_G": 0,
-                "Insurance_E": 0,
-                "Legal_R": 0,
-                "Legal_Y": 0,
-                "Legal_G": 0,
-                "Legal_E": 0,
-                "Response_R": 1,
-                "Response_Y": 0,
-                "Response_G": 1,
-                "Response_E": 0,
-                "Finalize_R": 0,
-                "Finalize_Y": 0,
-                "Finalize_G": 0,
-                "Finalize_E": 0,
-                "Complete_R": 0,
-                "Complete_Y": 0,
-                "Complete_G": 0,
-                "Complete_E": 0,
-                "Maintain_R": 2,
-                "Maintain_Y": 0,
-                "Maintain_G": 0,
-                "Maintain_E": 0,
-                "Change_R": 0,
-                "Change_Y": 0,
-                "Change_G": 0,
-                "Change_E": 0,
-                "CPO_R": 0,
-                "CPO_Y": 0,
-                "CPO_G": 0,
-                "CPO_E": 0
-            },
-            {
-                "Username": "ecook9",
-                "Pipeline_R": 1,
-                "Pipeline_Y": 2,
-                "Pipeline_G": 0,
-                "Pipeline_E": 1,
-                "Preparation_R": 0,
-                "Preparation_Y": 0,
-                "Preparation_G": 0,
-                "Preparation_E": 0,
-                "Sourcing_R": 0,
-                "Sourcing_Y": 0,
-                "Sourcing_G": 1,
-                "Sourcing_E": 0,
-                "Insurance_R": 0,
-                "Insurance_Y": 0,
-                "Insurance_G": 0,
-                "Insurance_E": 0,
-                "Legal_R": 0,
-                "Legal_Y": 0,
-                "Legal_G": 0,
-                "Legal_E": 0,
-                "Response_R": 1,
-                "Response_Y": 0,
-                "Response_G": 0,
-                "Response_E": 0,
-                "Finalize_R": 0,
-                "Finalize_Y": 0,
-                "Finalize_G": 1,
-                "Finalize_E": 0,
-                "Complete_R": 0,
-                "Complete_Y": 0,
-                "Complete_G": 0,
-                "Complete_E": 0,
-                "Maintain_R": 0,
-                "Maintain_Y": 1,
-                "Maintain_G": 0,
-                "Maintain_E": 0,
-                "Change_R": 0,
-                "Change_Y": 0,
-                "Change_G": 0,
-                "Change_E": 0,
-                "CPO_R": 0,
-                "CPO_Y": 0,
-                "CPO_G": 0,
-                "CPO_E": 0
-            },
-            {
-                "Username": "raywise3",
-                "Pipeline_R": 2,
-                "Pipeline_Y": 2,
-                "Pipeline_G": 0,
-                "Pipeline_E": 0,
-                "Preparation_R": 0,
-                "Preparation_Y": 2,
-                "Preparation_G": 0,
-                "Preparation_E": 0,
-                "Sourcing_R": 0,
-                "Sourcing_Y": 0,
-                "Sourcing_G": 0,
-                "Sourcing_E": 0,
-                "Insurance_R": 0,
-                "Insurance_Y": 0,
-                "Insurance_G": 0,
-                "Insurance_E": 0,
-                "Legal_R": 1,
-                "Legal_Y": 1,
-                "Legal_G": 1,
-                "Legal_E": 0,
-                "Response_R": 0,
-                "Response_Y": 0,
-                "Response_G": 0,
-                "Response_E": 1,
-                "Finalize_R": 0,
-                "Finalize_Y": 0,
-                "Finalize_G": 0,
-                "Finalize_E": 0,
-                "Complete_R": 0,
-                "Complete_Y": 0,
-                "Complete_G": 0,
-                "Complete_E": 0,
-                "Maintain_R": 1,
-                "Maintain_Y": 0,
-                "Maintain_G": 1,
-                "Maintain_E": 0,
-                "Change_R": 0,
-                "Change_Y": 0,
-                "Change_G": 0,
-                "Change_E": 0,
-                "CPO_R": 0,
-                "CPO_Y": 0,
-                "CPO_G": 0,
-                "CPO_E": 0
-            },
-            {
-                "Username": "ericwelsh6",
-                "Pipeline_R": 0,
-                "Pipeline_Y": 1,
-                "Pipeline_G": 0,
-                "Pipeline_E": 0,
-                "Preparation_R": 0,
-                "Preparation_Y": 2,
-                "Preparation_G": 0,
-                "Preparation_E": 0,
-                "Sourcing_R": 0,
-                "Sourcing_Y": 0,
-                "Sourcing_G": 0,
-                "Sourcing_E": 1,
-                "Insurance_R": 0,
-                "Insurance_Y": 0,
-                "Insurance_G": 0,
-                "Insurance_E": 0,
-                "Legal_R": 0,
-                "Legal_Y": 0,
-                "Legal_G": 0,
-                "Legal_E": 0,
-                "Response_R": 0,
-                "Response_Y": 2,
-                "Response_G": 1,
-                "Response_E": 3,
-                "Finalize_R": 0,
-                "Finalize_Y": 1,
-                "Finalize_G": 0,
-                "Finalize_E": 0,
-                "Complete_R": 0,
-                "Complete_Y": 0,
-                "Complete_G": 0,
-                "Complete_E": 0,
-                "Maintain_R": 0,
-                "Maintain_Y": 0,
-                "Maintain_G": 0,
-                "Maintain_E": 0,
-                "Change_R": 0,
-                "Change_Y": 0,
-                "Change_G": 0,
-                "Change_E": 0,
-                "CPO_R": 0,
-                "CPO_Y": 0,
-                "CPO_G": 0,
-                "CPO_E": 0
-            },
-            {
-                "Username": "mbernstein4",
-                "Pipeline_R": 0,
-                "Pipeline_Y": 0,
-                "Pipeline_G": 0,
-                "Pipeline_E": 0,
-                "Preparation_R": 0,
-                "Preparation_Y": 0,
-                "Preparation_G": 0,
-                "Preparation_E": 0,
-                "Sourcing_R": 0,
-                "Sourcing_Y": 0,
-                "Sourcing_G": 0,
-                "Sourcing_E": 0,
-                "Insurance_R": 0,
-                "Insurance_Y": 0,
-                "Insurance_G": 0,
-                "Insurance_E": 0,
-                "Legal_R": 0,
-                "Legal_Y": 0,
-                "Legal_G": 0,
-                "Legal_E": 0,
-                "Response_R": 1,
-                "Response_Y": 0,
-                "Response_G": 0,
-                "Response_E": 1,
-                "Finalize_R": 0,
-                "Finalize_Y": 0,
-                "Finalize_G": 0,
-                "Finalize_E": 0,
-                "Complete_R": 0,
-                "Complete_Y": 0,
-                "Complete_G": 0,
-                "Complete_E": 0,
-                "Maintain_R": 2,
-                "Maintain_Y": 6,
-                "Maintain_G": 2,
-                "Maintain_E": 2,
-                "Change_R": 0,
-                "Change_Y": 0,
-                "Change_G": 0,
-                "Change_E": 0,
-                "CPO_R": 0,
-                "CPO_Y": 0,
-                "CPO_G": 0,
-                "CPO_E": 0
-            },
-            {
-                "Username": "nicholaseasley",
-                "Pipeline_R": 0,
-                "Pipeline_Y": 0,
-                "Pipeline_G": 0,
-                "Pipeline_E": 0,
-                "Preparation_R": 0,
-                "Preparation_Y": 0,
-                "Preparation_G": 0,
-                "Preparation_E": 0,
-                "Sourcing_R": 0,
-                "Sourcing_Y": 0,
-                "Sourcing_G": 0,
-                "Sourcing_E": 0,
-                "Insurance_R": 0,
-                "Insurance_Y": 0,
-                "Insurance_G": 0,
-                "Insurance_E": 0,
-                "Legal_R": 0,
-                "Legal_Y": 0,
-                "Legal_G": 0,
-                "Legal_E": 0,
-                "Response_R": 0,
-                "Response_Y": 0,
-                "Response_G": 0,
-                "Response_E": 0,
-                "Finalize_R": 0,
-                "Finalize_Y": 0,
-                "Finalize_G": 0,
-                "Finalize_E": 0,
-                "Complete_R": 0,
-                "Complete_Y": 0,
-                "Complete_G": 0,
-                "Complete_E": 0,
-                "Maintain_R": 0,
-                "Maintain_Y": 0,
-                "Maintain_G": 1,
-                "Maintain_E": 0,
-                "Change_R": 0,
-                "Change_Y": 0,
-                "Change_G": 0,
-                "Change_E": 0,
-                "CPO_R": 0,
-                "CPO_Y": 0,
-                "CPO_G": 0,
-                "CPO_E": 0
-            }
-        ];
+
         //var key = ["Pipeline", "Preparation", "Sourcing", "Insurance", "Legal", "Response", "Finalize", "Complete", "Maintain", "Change", "CPO"];
 
         //var key = ["Red", "Green", "Yellow", "Grey"];
@@ -773,6 +400,7 @@
             key: key,
             element: 'stacked-bar'
         });
+        });
 
         function linkTrelloTitles(SEname, stage, difficulty) {
             d3.json('management/trello-cards.json', function (error, data) {
@@ -817,12 +445,12 @@
             <svg width="90" height = "91">
                 <rect width='90' height='91' stroke='black' fill='white'>Simple</rect>
             </svg>
-            <svg width="17" height = "91">
-                <rect width='17' height='91' stroke='black' fill='white'>Inactionable</rect>
+            <svg width="34" height = "91">
+                <rect width='34' height='91' stroke='black' fill='white'>Inactionable</rect>
             </svg>
             <!--<p>Difficult  Medium Simple Inactionable</p>-->
         </div>
-        <div class="legend2"><p>Difficult (13),&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Medium (8),&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Simple (5),&nbsp&nbsp Inactionable (1) </p></div>
+        <div class="legend2"><p>Difficult (13),&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Medium (8),&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Simple (5),&nbsp&nbsp Inactionable (2) </p></div>
         <br/>
     </div>
     <br/>

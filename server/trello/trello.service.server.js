@@ -345,6 +345,7 @@ function summaryGenerator() {
                         console.log(JSON.parse(cards[people]["Cards"][card]));
                 }
             }
+            
             summary.push({
                 "Username": cards[people].Username,
                 "Pipeline_R": pipelineCnt[0],
@@ -404,6 +405,8 @@ function summaryGenerator() {
 
             });
     }
+
+    summary = changeNames(summary);
     fs.writeFileSync('./public/management/trello-cards-summary.json', JSON.stringify(summary, "utf-8"))
 }
 
@@ -458,6 +461,33 @@ function addRandomColors(listOfCards) {
     return listOfCards;
 }
 
+function changeNames(summary){
+    for(se in summary){
+        switch (summary[se].Username){
+            case "ericwelsh6":
+                summary[se].Username = "EWELSH";
+                break;
+            case "raywise3":
+                summary[se].Username = "RWISE";
+                break;
+            case "ecook9":
+                summary[se].Username = "JDELALA";
+                break;
+            case "robweiner1":
+                summary[se].Username = "RWEINER";
+                break;
+            case "joe21537099":
+                summary[se].Username = "AFLYNN";
+                break;
+            case "tdionne1":
+                summary[se].Username = "TDIONNE";
+                break;
+            default:
+                console.log(summary[se].Username + " doesn't have an alias.")
+        }
+    }
+    return summary;
+}
 //formatBySE();
 //getLists();
 //summaryGenerator();

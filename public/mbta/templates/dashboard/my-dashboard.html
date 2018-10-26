@@ -1,5 +1,47 @@
-<div class="container">
+<div class="container-fluid">
     <h1 class="display-4">Actionable Requisitions</h1>
+    <div class="list-group">
+        <div class="list-header list-group-item " style="background-color: #0E7DC2;">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-1">Business Unit</div>
+                <div class="col-1">Req ID</div>
+                <div class="col-1">Requisition Date</div>
+                <div class="col-1">Approval Date</div>
+                <div class="col-1">Req Amount</div>
+                <div class="col-2">Requested Vendor</div>
+                <div class="col-4">Description</div>
+
+                <div class="col-1"></div>
+            </div>
+        </div>
+        <div ng-repeat="req in model.normalReqs | orderBy: 'reqInfo.Approved_On'| limitTo: model.limitTo">
+            <div class="list-group-item">
+                <div class="row bid-row">
+                    <div class="col-1"><a ng-click="model.addFlag(req.Req_ID)"
+                                          class="btn far fa-flag mx-1 center-block"></a>
+                    </div>
+                    <div class="col-1">{{req.Business_Unit}}</div>
+                    <div class="col-1">{{req.Req_ID}}</div>
+                    <div class="col-1">{{model.formatDate(req.reqInfo.REQ_Date)}}</div>
+                    <div class="col-1">{{model.formatDate(req.reqInfo.Approved_On)}}</div>
+                    <div class="col-1">{{model.formatMoney(req.reqInfo.Amount)}}</div>
+                    <div class="col-2" style="overflow: hidden; word-wrap: break-word;">{{req.reqInfo.Vendor.Name}}</div>
+                    <div class="col-4
+" style="overflow: hidden; word-wrap: break-word;">{{req.reqInfo.lines[0].More_Info}}</div>
+                    <div class="col-1"><a href="#!/reqinfo?reqid={{req.Req_ID}}"
+                                          class="btn fas fa-eye mx-1 center-block"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-click="model.limitTo = model.limitTo + 10" class = 'btn btn-link'>Show More Requisitions</div>
+        <br/>
+
+
+    </div>
+
+    <h1 class="display-4">Requisitions in Transmittal</h1>
     <div class="list-group">
         <div class="list-header list-group-item " style="background-color: #0E7DC2;">
             <div class="row">
@@ -13,7 +55,7 @@
                 <div class="col-1"></div>
             </div>
         </div>
-        <div ng-repeat="req in model.normalReqs | orderBy: 'reqInfo.Approved_On'| limitTo: model.limitTo">
+        <div ng-repeat="req in model.inactionable| orderBy: 'reqInfo.Approved_On'">
             <div class="list-group-item">
                 <div class="row bid-row">
                     <div class="col-1">{{req.Business_Unit}}</div>
@@ -22,19 +64,17 @@
                     <div class="col-1">{{model.formatMoney(req.reqInfo.Amount)}}</div>
                     <div class="col-3" style="overflow: hidden; word-wrap: break-word;">{{req.reqInfo.Vendor.Name}}</div>
                     <div class="col-3" style="overflow: hidden; word-wrap: break-word;">{{req.reqInfo.lines[0].More_Info}}</div>
+
                     <div class="col-1"><a href="#!/reqinfo?reqid={{req.Req_ID}}"
                                           class="btn fas fa-eye mx-1 center-block"></a>
                     </div>
                 </div>
             </div>
         </div>
-        <div ng-click="model.limitTo = model.limitTo + 10" class = 'btn btn-link'>Show More Requisitions</div>
-        <br/>
-
-
     </div>
+    <br>
 
-    <h1 class="display-4">In-actionable Requisitions</h1>
+    <h1 class="display-4">Requisitions on Hold</h1>
     <div class="list-group">
         <div class="list-header list-group-item " style="background-color: #0E7DC2;">
             <div class="row">

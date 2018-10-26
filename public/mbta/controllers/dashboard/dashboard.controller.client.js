@@ -58,6 +58,13 @@
             return month + "/" + day + "/" + year;
 
         };
+        model.addFlag = function(reqId){
+            dashService
+                .addFlag(reqId)
+                .then(function(){
+                    model.getDashboardInformation();
+                })
+        }
         function getSumOfLines(lines){
             sum = 0;
             for(line in lines){

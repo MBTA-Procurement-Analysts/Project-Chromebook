@@ -5,6 +5,7 @@ reqModel.findReq = findReq;
 reqModel.addNote = addNote;
 reqModel.getBuyerReqsForDate = getBuyerReqsForDate;
 reqModel.getReqsForDate = getReqsForDate;
+reqModel.addFlag = addFlag;
 module.exports = reqModel;
 
 function findReq(reqNumber){
@@ -24,6 +25,17 @@ function addNote(reqNumber, note){
                 "Date": note.Date,
                 "Note_Info": note.Note_Info
             }
+        }})
+}
+
+function addFlag(reqNumber){
+    console.log(reqNumber);
+    console.log(note.User);
+    console.log(note.Date);
+    console.log(note.Note_Info);
+    return reqModel.updateOne({"REQ_No": reqNumber}, {
+        '$set': {
+            "flag": True
         }})
 }
 

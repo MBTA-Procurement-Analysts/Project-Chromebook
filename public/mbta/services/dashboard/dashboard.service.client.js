@@ -6,6 +6,7 @@
     function dashService($http) {
         var api = {
             getDashboard: getDashboard,
+            addFlag: addFlag
         };
         return api;
 
@@ -16,6 +17,14 @@
                 .then(function (response) {
                     return response.data;
                 });
+        }
+
+        function addFlag(reqId){
+            var url = '/api/req/addFlag/' + reqId;
+            return $http.put(url)
+                .then(function(response){
+                    return response.data;
+                })
         }
 
     }

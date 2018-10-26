@@ -5,7 +5,7 @@ app.get('/api/req/:number', findReq);
 app.post('/api/add-note/:reqId', addNote);
 app.get('/api/req/buyer/:buyer/:date', getBuyerReqsForDate);
 app.get('/api/req/date/:date', getReqsForDate);
-
+app.put('/api/req/addFlag/:reqId', addFlag);
 function getBuyerReqsForDate(req,res){
     console.log(req.params.date);
     reqModel
@@ -46,3 +46,13 @@ function addNote(req, res){
         });
 }
 
+function addFlag(req, res) {
+    reqModel
+        .addFlag(req.params.reqId)
+        .then(function (val) {
+            res.json(val);
+        }, function (err) {
+            console.log(err);
+            res.send(err);
+        });
+}
