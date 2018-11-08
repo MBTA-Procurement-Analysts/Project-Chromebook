@@ -9,6 +9,7 @@ var foundList = [];
 var foundIDs = [];
 var listOfColumnNames = [];
 
+
 function setUpCardGet(arrayOfLists) {
     for (list in arrayOfLists) {
         listOfColumnNames.push(arrayOfLists[list].name);
@@ -23,6 +24,7 @@ function setUpCardGet(arrayOfLists) {
 
 function getCards(options, name) {
     request(options, function (error, response, body) {
+        console.log(error);
         if (error) throw new Error(error);
         cards = JSON.parse(body);
         processCards(cards, name);
@@ -46,7 +48,7 @@ function processCards(cards, listName) {
         try {
             var color = cards[card].labels[0].color;
         } catch (e) {
-            var color = "";
+            var color = "none";
         }
         for (mem in cards[card].idMembers) {
             if (memberList.indexOf(cards[card].idMembers[mem]) < 0) {
@@ -120,24 +122,23 @@ function formatBySE() {
     }
     fs.writeFileSync('./public/management/trello-cards.json', JSON.stringify(toReturn, "utf-8"))
 }
-summaryGenerator();
 function summaryGenerator() {
     var cards = JSON.parse(fs.readFileSync("public/management/trello-cards.json", "utf-8"));
     var summary = [];
     for (people in cards) {
         //console.log(cards[people]["Cards"].length);
             //console.log("c" + c)
-            var pipelineCnt = [0, 0, 0, 0];
-            var prepareCnt = [0, 0, 0, 0];
-            var sourcingCnt = [0, 0, 0, 0];
-            var insuranceCnt = [0, 0, 0, 0];
-            var legalCnt = [0, 0, 0, 0];
-            var responseCnt = [0, 0, 0, 0];
-            var finalizeCnt = [0, 0, 0, 0];
-            var completeCnt = [0, 0, 0, 0];
-            var maintainCnt = [0, 0, 0, 0];
-            var changeCnt = [0, 0, 0, 0];
-            var cpoCnt = [0, 0, 0, 0];
+            var pipelineCnt = [0, 0, 0, 0, 0];
+            var prepareCnt = [0, 0, 0, 0, 0];
+            var sourcingCnt = [0, 0, 0, 0, 0];
+            var insuranceCnt = [0, 0, 0, 0, 0];
+            var legalCnt = [0, 0, 0, 0, 0];
+            var responseCnt = [0, 0, 0, 0,0];
+            var finalizeCnt = [0, 0, 0, 0,0];
+            var completeCnt = [0, 0, 0, 0,0];
+            var maintainCnt = [0, 0, 0, 0,0];
+            var changeCnt = [0, 0, 0, 0,0];
+            var cpoCnt = [0, 0, 0, 0,0];
             for (card in cards[people]["Cards"]) {
                 //console.log(cards[people]["Cards"][card])
                 switch (JSON.parse(cards[people]["Cards"][card]).List) {
@@ -152,11 +153,12 @@ function summaryGenerator() {
                             case "green":
                                 pipelineCnt[2]++;
                                 break;
-
                             case "grey":
                                 pipelineCnt[3]++;
                                 break;
-
+                            case "none":
+                                pipelineCnt[4]++;
+                                break;
                             default:
                                 console.log("uh-oh");
                         }
@@ -175,6 +177,9 @@ function summaryGenerator() {
                             case "grey":
                                 prepareCnt[3]++;
                                 break;
+                                case "none":
+                           prepareCnt[4]++;
+                            break;
                             default:
                                 console.log("uh-oh");
                         }
@@ -187,11 +192,14 @@ function summaryGenerator() {
                             case "yellow":
                                 sourcingCnt[1]++;
                                 break;
-                            case "green":
+                            case "lime":
                                 sourcingCnt[2]++;
                                 break;
                             case "grey":
                                 sourcingCnt[3]++;
+                                break;
+                            case "none":
+                                sourcingCnt[4]++;
                                 break;
                             default:
                                 console.log("uh-oh");
@@ -205,11 +213,14 @@ function summaryGenerator() {
                             case "yellow":
                                 insuranceCnt[1]++;
                                 break;
-                            case "green":
+                            case "lime":
                                 insuranceCnt[2]++;
                                 break;
                             case "grey":
                                 insuranceCnt[3]++;
+                                break;
+                            case "none":
+                                insuranceCnt[4]++;
                                 break;
                             default:
                                 console.log("uh-oh");
@@ -223,11 +234,14 @@ function summaryGenerator() {
                             case "yellow":
                                 legalCnt[1]++;
                                 break;
-                            case "green":
+                            case "lime":
                                 legalCnt[2]++;
                                 break;
                             case "grey":
                                 legalCnt[3]++;
+                                break;
+                            case "none":
+                                legalCnt[4]++;
                                 break;
                             default:
                                 console.log("uh-oh");
@@ -241,11 +255,14 @@ function summaryGenerator() {
                             case "yellow":
                                 responseCnt[1]++;
                                 break;
-                            case "green":
+                            case "lime":
                                 responseCnt[2]++;
                                 break;
                             case "grey":
                                 responseCnt[3]++;
+                                break;
+                            case "none":
+                                responseCnt[4]++;
                                 break;
                             default:
                                 console.log("uh-oh");
@@ -259,11 +276,14 @@ function summaryGenerator() {
                             case "yellow":
                                 finalizeCnt[1]++;
                                 break;
-                            case "green":
+                            case "lime":
                                 finalizeCnt[2]++;
                                 break;
                             case "grey":
                                 finalizeCnt[3]++;
+                                break;
+                            case "none":
+                                finalizeCnt[4]++;
                                 break;
                             default:
                                 console.log("uh-oh");
@@ -277,11 +297,14 @@ function summaryGenerator() {
                             case "yellow":
                                 completeCnt[1]++;
                                 break;
-                            case "green":
+                            case "lime":
                                 completeCnt[2]++;
                                 break;
                             case "grey":
                                 completeCnt[3]++;
+                                break;
+                            case "none":
+                                completeCnt[4]++;
                                 break;
                             default:
                                 console.log("uh-oh");
@@ -295,11 +318,14 @@ function summaryGenerator() {
                             case "yellow":
                                 maintainCnt[1]++;
                                 break;
-                            case "green":
+                            case "lime":
                                 maintainCnt[2]++;
                                 break;
                             case "grey":
                                 maintainCnt[3]++;
+                                break;
+                            case "none":
+                                maintainCnt[4]++;
                                 break;
                             default:
                                 console.log("uh-oh");
@@ -313,11 +339,14 @@ function summaryGenerator() {
                             case "yellow":
                                 changeCnt[1]++;
                                 break;
-                            case "green":
+                            case "lime":
                                 changeCnt[2]++;
                                 break;
                             case "grey":
                                 changeCnt[3]++;
+                                break;
+                            case "none":
+                                changeCnt[4]++;
                                 break;
                             default:
                                 console.log("uh-oh");
@@ -331,11 +360,14 @@ function summaryGenerator() {
                             case "yellow":
                                 cpoCnt[1]++;
                                 break;
-                            case "green":
+                            case "lime":
                                 cpoCnt[2]++;
                                 break;
                             case "grey":
                                 cpoCnt[3]++;
+                                break;
+                            case "none":
+                                cpoCnt[4]++;
                                 break;
                             default:
                                 console.log("uh-oh");
@@ -352,56 +384,67 @@ function summaryGenerator() {
                 "Pipeline_Y": pipelineCnt[1],
                 "Pipeline_G": pipelineCnt[2],
                 "Pipeline_E": pipelineCnt[3],
+                "Pipeline_U": pipelineCnt[4],
 
                 "Preparation_R": prepareCnt[0],
                 "Preparation_Y": prepareCnt[1],
                 "Preparation_G": prepareCnt[2],
                 "Preparation_E": prepareCnt[3],
+                "Preparation_U": prepareCnt[4],
 
                 "Sourcing_R": sourcingCnt[0],
                 "Sourcing_Y": sourcingCnt[1],
                 "Sourcing_G": sourcingCnt[2],
                 "Sourcing_E": sourcingCnt[3],
+                "Sourcing_U": sourcingCnt[4],
 
                 "Insurance_R": insuranceCnt[0],
                 "Insurance_Y": insuranceCnt[1],
                 "Insurance_G": insuranceCnt[2],
                 "Insurance_E": insuranceCnt[3],
+                "Insurance_U": insuranceCnt[4],
 
                 "Legal_R": legalCnt[0],
                 "Legal_Y": legalCnt[1],
                 "Legal_G": legalCnt[2],
                 "Legal_E": legalCnt[3],
+                "Legal_U": legalCnt[4],
 
                 "Response_R": responseCnt[0],
                 "Response_Y": responseCnt[1],
                 "Response_G": responseCnt[2],
                 "Response_E": responseCnt[3],
+                "Response_U": responseCnt[4],
 
                 "Finalize_R": finalizeCnt[0],
                 "Finalize_Y": finalizeCnt[1],
                 "Finalize_G": finalizeCnt[2],
                 "Finalize_E": finalizeCnt[3],
+                "Finalize_U": finalizeCnt[4],
 
                 "Complete_R": completeCnt[0],
                 "Complete_Y": completeCnt[1],
                 "Complete_G": completeCnt[2],
                 "Complete_E": completeCnt[3],
+                "Complete_U": completeCnt[4],
 
                 "Maintain_R": maintainCnt[0],
                 "Maintain_Y": maintainCnt[1],
                 "Maintain_G": maintainCnt[2],
                 "Maintain_E": maintainCnt[3],
+                "Maintain_U": maintainCnt[4],
 
                 "Change_R": changeCnt[0],
                 "Change_Y": changeCnt[1],
                 "Change_G": changeCnt[2],
                 "Change_E": changeCnt[3],
+                "Change_U": changeCnt[4],
 
                 "CPO_R": cpoCnt[0],
                 "CPO_Y": cpoCnt[1],
                 "CPO_G": cpoCnt[2],
-                "CPO_E": cpoCnt[3]
+                "CPO_E": cpoCnt[3],
+                "CPO_U": cpoCnt[4]
 
             });
     }
@@ -416,7 +459,7 @@ function colorBucketer() {
             responseCnt[0]++;
         case "yellow":
             pipelineCnt[1]++;
-        case "green":
+        case "lime":
             pipelineCnt[2]++;
         case "grey":
             pipelineCnt[3]++;
@@ -427,7 +470,7 @@ function colorBucketer() {
 
 function findCards(memberId) {
     var cards = JSON.parse(fs.readFileSync("trello.json", "utf-8"));
-    cards = addRandomColors(cards);
+    //cards = addRandomColors(cards);
     var returnArray = [];
     for (card in cards) {
         if (cards[card].Member_IDs.indexOf(memberId) > -1) {
@@ -439,13 +482,13 @@ function findCards(memberId) {
     return returnArray;
 }
 
-
+/*
 function addRandomColors(listOfCards) {
     for (card in listOfCards) {
         rNum = Math.floor((Math.random() * 4) + 1);
         switch (rNum) {
             case 1:
-                listOfCards[card].Color = "green";
+                listOfCards[card].Color = "lime";
                 break;
             case 2:
                 listOfCards[card].Color = "yellow";
@@ -460,7 +503,7 @@ function addRandomColors(listOfCards) {
     console.log("done")
     return listOfCards;
 }
-
+*/
 function changeNames(summary){
     for(se in summary){
         switch (summary[se].Username){
@@ -471,13 +514,22 @@ function changeNames(summary){
                 summary[se].Username = "RWISE";
                 break;
             case "ecook9":
-                summary[se].Username = "JDELALA";
+                summary[se].Username = "ECOOK";
                 break;
             case "robweiner1":
                 summary[se].Username = "RWEINER";
                 break;
+            case "jdelalla1":
+                summary[se].Username = "JDELALLA";
+                break;
             case "joe21537099":
                 summary[se].Username = "AFLYNN";
+                break;
+            case "nicholaseasley":
+                summary[se].Username = "NEASLEY";
+                break;
+            case "mbernstein4":
+                summary[se].Username = "MBERNSTEIN";
                 break;
             case "tdionne1":
                 summary[se].Username = "TDIONNE";
@@ -488,6 +540,9 @@ function changeNames(summary){
     }
     return summary;
 }
-//formatBySE();
-//getLists();
-//summaryGenerator();
+
+module.exports = {
+    getLists: getLists,
+    formatBySE: formatBySE,
+    summaryGenerator: summaryGenerator
+};

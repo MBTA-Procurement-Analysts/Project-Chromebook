@@ -81,10 +81,43 @@
             margin-right: 1em;
         }
     </style>
-    <h1 class="text-center">Trello Dashboard</h1>
+    <h1 class="text-center">Sourcing Executive Workload</h1>
     <p>This visualization shows the workload of each Sourcing Executive. The length of the bar as well as the number within the bar indicates the number of projects in a particular stage of the sourcing process, and the color indicates this stage.
-        These bars are created so that a difficult project is 13 difficulty points, a medium project is 8, a simple project is 5, and an inactionable project is 2.
+        These bars are created so that a difficult project is 13 complexity "points", a medium project is 8, a simple project is 5, and an inactionable project is 2.
     </p>
+    <div class="container">
+        <div id="legend2">
+            <div>
+                <svg width="233" height = "91">
+                    <rect width='233' height='91' stroke='black' fill="white"></rect>
+                </svg>
+                <svg width ='144' height = "91">
+                    <rect width='144' height='91' stroke='black' fill="white">Medium</rect>
+                </svg>
+                <svg width="90" height = "91">
+                    <rect width='90' height='91' stroke='black' fill='white'>Simple</rect>
+                </svg>
+                <svg width="34" height = "91">
+                    <rect width='34' height='91' stroke='black' fill='white'>Inactionable</rect>
+                </svg>
+                <!--<p>Difficult  Medium Simple Inactionable</p>-->
+            </div>
+            <div class="legend2"><p>Difficult (13),&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Medium (8),&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Simple (5),&nbsp&nbsp Inactionable (2) </p></div>
+            <br/>
+            <br/>
+            <h3>Legend</h3>
+            <div class="legend2"><p class="country-name"><span class="key-dot pipeline"></span>Pipeline</p></div>
+            <div class="legend2"><p class="country-name"><span class="key-dot preparation"></span>Preparation</p></div>
+            <div class="legend2"><p class="country-name"><span class="key-dot sourcing"></span>Sourcing</p></div>
+            <div class="legend2"><p class="country-name"><span class="key-dot insurance"></span>Insurance</p></div>
+            <div class="legend2"><p class="country-name"><span class="key-dot legal"></span>Legal</p></div>
+            <div class="legend2"><p class="country-name"><span class="key-dot response"></span>Response</p></div>
+            <div class="legend2"><p class="country-name"><span class="key-dot finalize"></span>Finalize</p></div>
+            <div class="legend2"><p class="country-name"><span class="key-dot complete"></span>Complete</p></div>
+            <div class="legend2"><p class="country-name"><span class="key-dot change"></span>Change</p></div>
+            <div class="legend2"><p class="country-name"><span class="key-dot cpo"></span>CPO</p></div>
+        </div>
+    </div>
     <div id="tDash"></div>
     <div id='stacked-bar'></div>
     <script src="//d3js.org/d3.v4.min.js"></script>
@@ -103,7 +136,7 @@
                     data = fib(config.data),
                     margin = {top: 25, right: 25, bottom: 55, left: 180},
                     width = 2000 - margin.left - margin.right,
-                    height = 900 - margin.top - margin.bottom,
+                    height = 1000 - margin.top - margin.bottom,
                     xScale = d3.scaleLinear().rangeRound([0, width]),
                     yScale = d3.scaleBand().rangeRound([height, 0]).padding(0.1),
                     xAxis = d3.axisBottom(xScale),
@@ -127,7 +160,7 @@
                     return d.Username;
                 }));
                 // this sets the x scale to be up to 100 difficulty level,
-                xScale.domain([0, 100]).nice();
+                xScale.domain([0, 120]).nice();
 
                 var layer = svg.selectAll(".layer")
                     .data(layers)
@@ -151,8 +184,10 @@
                             text += "Medium Projects in ";
                         } else if (d.key.substr(d.key.length - 1, d.key.length) == 'G') {
                             text += "Simple Projects in ";
-                        } else {
+                        } else if (d.key.substr(d.key.length - 1, d.key.length) == 'E'){
                             text += "Inactionable Projects in "
+                        } else{
+                            text += "Difficulty Unassigned in "
                         }
                         text += d.key.substr(0, d.key.length - 2) + " Stage";
                         displayTooltip(text);
@@ -200,7 +235,24 @@
                             return fibVal /2;
                         }
                     });
-
+                layer.selectAll("eTex")
+                    .data(function (d) {
+                        return d;
+                    })
+                    .enter().append("text")
+                    .attr("y", function (d) {
+                        return yScale(d.data.Username) +46;
+                    })
+                    .attr("x", function (d) {
+                        return xScale(d[1]) + 1;
+                    })
+                    .attr("class", "eTex")
+                    .attr("dy", ".35em")
+                    .attr("fill", "black")
+                    .attr('font-size',"30px")
+                    .text(function (d) {
+                            return d.data.Total;
+                    });
                 svg.append("g")
                     .attr("class", "axis axis--x")
                     .attr("transform", "translate(0," + (height + 5) + ")")
@@ -210,7 +262,7 @@
                     .attr('transform', 'translate(' + (width - 100) + " ," + (height + margin.top + 25) + ')')
                     .style('text-anchor', 'middle')
                     .style('font', '24px sans-serif')
-                    .text("Difficulty");
+                    .text("Complexity");
 
                 svg.append("g")
                     .attr("class", "axis axis--y")
@@ -274,42 +326,57 @@
                 "Pipeline_Y",
                 "Pipeline_G",
                 "Pipeline_E",
+                "Pipeline_U",
                 "Preparation_R",
                 "Preparation_Y",
                 "Preparation_G",
                 "Preparation_E",
+                "Preparation_U",
                 "Sourcing_R",
                 "Sourcing_Y",
                 "Sourcing_G",
                 "Sourcing_E",
+                "Sourcing_U",
                 "Insurance_R",
                 "Insurance_Y",
                 "Insurance_G",
                 "Insurance_E",
+                "Insurance_U",
                 "Legal_R",
                 "Legal_Y",
                 "Legal_G",
                 "Legal_E",
+                "Legal_U",
                 "Response_R",
                 "Response_Y",
                 "Response_G",
                 "Response_E",
+                "Response_U",
+
                 "Finalize_R",
                 "Finalize_Y",
                 "Finalize_G",
                 "Finalize_E",
+                "Finalize_U",
                 "Complete_R",
                 "Complete_Y",
                 "Complete_G",
                 "Complete_E",
+                "Complete_U",
+
                 "Change_R",
                 "Change_Y",
                 "Change_G",
                 "Change_E",
+                "Change_U",
+
                 "CPO_R",
                 "CPO_Y",
                 "CPO_G",
-                "CPO_E"];
+                "CPO_E",
+                "CPO_U"
+
+            ];
             for (person in data) {
                 stageList = {"Username": data[person].Username};
                 personTotal = 0;
@@ -327,6 +394,9 @@
                             break;
                         case "_E":
                             stageAmounts = data[person][lists[stage]] * 2;
+                            break;
+                        case "_U":
+                            stageAmounts = data[person][lists[stage]] * 5;
                             break;
                         default:
                             console.log('uh oh');
@@ -354,46 +424,57 @@
             "Pipeline_Y",
             "Pipeline_G",
             "Pipeline_E",
+            "Pipeline_U",
             "Preparation_R",
             "Preparation_Y",
             "Preparation_G",
             "Preparation_E",
+            "Preparation_U",
             "Sourcing_R",
             "Sourcing_Y",
             "Sourcing_G",
             "Sourcing_E",
+            "Sourcing_U",
             "Insurance_R",
             "Insurance_Y",
             "Insurance_G",
             "Insurance_E",
+            "Insurance_U",
             "Legal_R",
             "Legal_Y",
             "Legal_G",
             "Legal_E",
+            "Legal_U",
             "Response_R",
             "Response_Y",
             "Response_G",
             "Response_E",
+            "Response_U",
+
             "Finalize_R",
             "Finalize_Y",
             "Finalize_G",
             "Finalize_E",
+            "Finalize_U",
             "Complete_R",
             "Complete_Y",
             "Complete_G",
             "Complete_E",
-            /* "Maintain_R",
-             "Maintain_Y",
-             "Maintain_G",
-             "Maintain_E", */
+            "Complete_U",
+
             "Change_R",
             "Change_Y",
             "Change_G",
             "Change_E",
+            "Change_U",
+
             "CPO_R",
             "CPO_Y",
             "CPO_G",
-            "CPO_E"];
+            "CPO_E",
+            "CPO_U"
+
+        ];
 
         initStackedBarChart.draw({
             data: data,
@@ -419,41 +500,5 @@
 
 
 </div>
-<div class="container">
-    <div id="legend2">
-        <h3>Legend</h3>
-        <div class="legend2"><p class="country-name"><span class="key-dot pipeline"></span>Pipeline</p></div>
-        <div class="legend2"><p class="country-name"><span class="key-dot preparation"></span>Preparation</p></div>
-        <div class="legend2"><p class="country-name"><span class="key-dot sourcing"></span>Sourcing</p></div>
-        <div class="legend2"><p class="country-name"><span class="key-dot insurance"></span>Insurance</p></div>
-        <div class="legend2"><p class="country-name"><span class="key-dot legal"></span>Legal</p></div>
-        <div class="legend2"><p class="country-name"><span class="key-dot response"></span>Response</p></div>
-        <div class="legend2"><p class="country-name"><span class="key-dot finalize"></span>Finalize</p></div>
-        <div class="legend2"><p class="country-name"><span class="key-dot complete"></span>Complete</p></div>
-        <div class="legend2"><p class="country-name"><span class="key-dot change"></span>Change</p></div>
-        <div class="legend2"><p class="country-name"><span class="key-dot cpo"></span>CPO</p></div>
-        <br/>
-        <br/>
 
-        <div>
-            <svg width="233" height = "91">
-                <rect width='233' height='91' stroke='black' fill="white"></rect>
-            </svg>
-            <svg width ='144' height = "91">
-                <rect width='144' height='91' stroke='black' fill="white">Medium</rect>
-            </svg>
-            <svg width="90" height = "91">
-                <rect width='90' height='91' stroke='black' fill='white'>Simple</rect>
-            </svg>
-            <svg width="34" height = "91">
-                <rect width='34' height='91' stroke='black' fill='white'>Inactionable</rect>
-            </svg>
-            <!--<p>Difficult  Medium Simple Inactionable</p>-->
-        </div>
-        <div class="legend2"><p>Difficult (13),&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Medium (8),&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Simple (5),&nbsp&nbsp Inactionable (2) </p></div>
-        <br/>
-    </div>
-    <br/>
-    <br/>
-</div>
 

@@ -3,7 +3,7 @@
         .module('Chrubix')
         .factory('dashService', dashService);
 
-    function dashService($http) {
+        function dashService($http) {
         var api = {
             getDashboard: getDashboard,
             addFlag: addFlag
@@ -21,8 +21,10 @@
 
         function addFlag(reqId){
             var url = '/api/req/addFlag/' + reqId;
+            console.log(url);
             return $http.put(url)
-                .then(function(response){
+                .then(function(response,error){
+                    console.log(error)
                     return response.data;
                 })
         }
